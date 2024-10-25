@@ -10,3 +10,7 @@ Parts:
 -	Software App (can be the website) for checking that the license plate is or is not in the DB
 -	DB
 -	Website to get authorized
+
+The Database Entity Relational Diagram can be analyzed here:
+
+![Database ERD](https://github.com/user-attachments/assets/d3f5e1e2-2392-4b4d-8b6a-d8871460aa3a)
