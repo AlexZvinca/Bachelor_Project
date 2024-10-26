@@ -13,5 +13,6 @@ Parts:
 
 The Database Entity Relational Diagram can be analyzed here:
 
-![Database ERD](https://github.com/user-attachments/assets/ba180177-815e-41b1-a1f3-927a0e811950)
+![Database ERD](https://github.com/user-attachments/assets/24d71b96-266e-4ab8-86c5-72c92a56207b)
+
 
