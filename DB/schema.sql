@@ -25,9 +25,9 @@ CREATE TABLE authorization_request (
     id VARCHAR(50) PRIMARY KEY,
     user_id VARCHAR(50) REFERENCES user_info(id) ON DELETE CASCADE,
     county_id VARCHAR(2) REFERENCES county(id) ON DELETE SET NULL,
-    id_copy VARCHAR(255) NOT NULL,
+    id_copy TEXT NOT NULL,
     license_plate_number VARCHAR(15) NOT NULL,
-    vehicle_identification VARCHAR(255) NOT NULL,
+    vehicle_identification TEXT NOT NULL,
     description TEXT,
     status VARCHAR(20) CHECK (status IN ('SENT', 'IN_ANALYSIS', 'GRANTED', 'NOT_GRANTED')) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
