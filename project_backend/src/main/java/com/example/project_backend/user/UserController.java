@@ -1,8 +1,5 @@
-package com.example.project_backend;
+package com.example.project_backend.user;
 
-import com.example.project_backend.user.Role;
-import com.example.project_backend.user.User;
-import com.example.project_backend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "api/v1/user")
@@ -26,4 +24,5 @@ public class UserController {
     public List<User> getUsers(){
         return userService.getUsers();
     }
+
 }

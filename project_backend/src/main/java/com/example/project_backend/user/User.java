@@ -1,5 +1,8 @@
 package com.example.project_backend.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,26 +11,48 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name="user_info")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User{
     @Id
     @GeneratedValue(generator = "county_based_id")
     @GenericGenerator(name = "county_based_id", strategy = "com.example.project_backend.user.IdGenerator")
     private String id;
+
     private String email;
     private String password;
     private String phone_number;
     private String first_name;
     private String surname;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate date_of_birth;
+
     private String county;
     private String city;
     private String address;
     private String cnp;
+
+    @Enumerated(EnumType.STRING)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Role role;
 
     public User(String id, String email, String password, String phone_number, String first_name, String surname,
                 LocalDate date_of_birth, String county, String city, String address, String cnp, Role role) {
         this.id = id;
+        this.email = email;
+        this.password = password;
+        this.phone_number = phone_number;
+        this.first_name = first_name;
+        this.surname = surname;
+        this.date_of_birth = date_of_birth;
+        this.county = county;
+        this.city = city;
+        this.address = address;
+        this.cnp = cnp;
+        this.role = role;
+    }
+
+    public User(String email, String password, String phone_number, String first_name, String surname, LocalDate date_of_birth, String county, String city, String address, String cnp, Role role) {
         this.email = email;
         this.password = password;
         this.phone_number = phone_number;
@@ -156,9 +181,5 @@ public class User{
                 ", cnp='" + cnp + '\'' +
                 ", role=" + role +
                 '}';
-    }
-
-    public String getFormattedId() {
-        return this.county + String.format("%03d", id);
     }
 }
