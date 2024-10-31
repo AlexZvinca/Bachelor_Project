@@ -1,9 +1,7 @@
 package com.example.project_backend.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,4 +23,13 @@ public class UserController {
         return userService.getUsers();
     }
 
+    @PostMapping
+    public void registerUser(@RequestBody User user){
+        userService.addUser(user);
+    }
+
+    @DeleteMapping(path = "{userId}")
+    public void deleteUser(@PathVariable("userId") String userId){
+        userService.deleteUser(userId);
+    }
 }

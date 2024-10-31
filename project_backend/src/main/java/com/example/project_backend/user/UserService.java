@@ -23,4 +23,20 @@ public class UserService {
     }
 
 
+    public void addUser(User user) {
+        boolean emailExists = userRepository.findByEmail(user.getEmail()).isPresent();
+        if (emailExists) {
+            throw new IllegalStateException("Email is already in use.");
+        }
+
+        userRepository.save(user);
+    }
+
+    public void deleteUser(String userId) {
+        boolean idExists = userRepository.findById(userId).isPresent();
+        if(!idExists) {
+            throw new IllegalStateException("User not found.");
+        }
+        userRepository.deleteById(userId);
+    }
 }
