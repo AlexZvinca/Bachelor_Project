@@ -1,6 +1,10 @@
-package com.example.project_backend.user;
+package com.example.project_backend.config;
 
 
+import com.example.project_backend.entities.County;
+import com.example.project_backend.entities.Role;
+import com.example.project_backend.entities.User;
+import com.example.project_backend.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +25,7 @@ public class UserConfig {
                     "Alexandru - Mihai",
                     "Zvinca",
                     LocalDate.of(2002, 5, 21),
-                    "HD",
+                    County.HD,
                     "Orastie",
                     "Strada yy, nr. xx",
                     "5555555555555",
@@ -35,7 +39,7 @@ public class UserConfig {
                     "Alexandru - George",
                     "Nicolae",
                     LocalDate.of(2002, 6, 22),
-                    "TM",
+                    County.TM,
                     "Tg Jiu",
                     "Strada yy, nr. xx",
                     "5555555555556",

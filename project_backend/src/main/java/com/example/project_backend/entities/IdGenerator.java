@@ -1,4 +1,4 @@
-package com.example.project_backend.user;
+package com.example.project_backend.entities;
 
 import jakarta.persistence.Query;
 import org.hibernate.id.IdentifierGenerator;
@@ -11,7 +11,7 @@ public class IdGenerator implements IdentifierGenerator {
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object obj) {
         User user = (User) obj;
-        String countyCode = user.getCounty();
+        County countyCode = user.getCounty();
 
         // Query for the current count of users with the same county code
         String queryStr = "SELECT COUNT(u) FROM User u WHERE u.county = :countyId";

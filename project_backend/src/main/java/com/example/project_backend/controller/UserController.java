@@ -1,11 +1,11 @@
-package com.example.project_backend.user;
+package com.example.project_backend.controller;
 
+import com.example.project_backend.entities.User;
+import com.example.project_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(path = "api/v1/user")

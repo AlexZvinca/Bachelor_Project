@@ -1,4 +1,4 @@
-package com.example.project_backend.user;
+package com.example.project_backend.entities;
 
 public enum Role {
     REQUESTOR,

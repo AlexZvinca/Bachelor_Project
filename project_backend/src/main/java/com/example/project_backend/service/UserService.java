@@ -1,10 +1,10 @@
-package com.example.project_backend.user;
+package com.example.project_backend.service;
 
+import com.example.project_backend.entities.User;
+import com.example.project_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service

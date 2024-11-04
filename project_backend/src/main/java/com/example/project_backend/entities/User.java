@@ -1,13 +1,12 @@
-package com.example.project_backend.user;
+package com.example.project_backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name="user_info")
@@ -15,36 +14,59 @@ import java.time.LocalDate;
 public class User{
     @Id
     @GeneratedValue(generator = "county_based_id")
-    @GenericGenerator(name = "county_based_id", strategy = "com.example.project_backend.user.IdGenerator")
+    @GenericGenerator(name = "county_based_id", strategy = "com.example.project_backend.entities.IdGenerator")
+    @Column(updatable = false)
     private String id;
 
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
-    private String phone_number;
-    private String first_name;
+
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
+
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
     private String surname;
 
+    @Column(name = "date_of_birth", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date_of_birth;
+    private LocalDate dateOfBirth;
 
-    private String county;
+    @Enumerated(EnumType.STRING)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @Column(nullable = false, length = 2)
+    private County county;
+
+    @Column(nullable = false)
     private String city;
+
+    @Column(nullable = false)
     private String address;
+
+    @Column(nullable = false, unique = true, length = 13)
     private String cnp;
 
     @Enumerated(EnumType.STRING)
     @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @Column(nullable = false)
     private Role role;
 
-    public User(String id, String email, String password, String phone_number, String first_name, String surname,
-                LocalDate date_of_birth, String county, String city, String address, String cnp, Role role) {
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AuthorizationRequest> authorizationRequests;
+
+    public User(String id, String email, String password, String phoneNumber, String firstName, String surname, LocalDate dateOfBirth, County county, String city, String address, String cnp, Role role) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.phone_number = phone_number;
-        this.first_name = first_name;
+        this.phoneNumber = phoneNumber;
+        this.firstName = firstName;
         this.surname = surname;
-        this.date_of_birth = date_of_birth;
+        this.dateOfBirth = dateOfBirth;
         this.county = county;
         this.city = city;
         this.address = address;
@@ -52,13 +74,13 @@ public class User{
         this.role = role;
     }
 
-    public User(String email, String password, String phone_number, String first_name, String surname, LocalDate date_of_birth, String county, String city, String address, String cnp, Role role) {
+    public User(String email, String password, String phoneNumber, String firstName, String surname, LocalDate dateOfBirth, County county, String city, String address, String cnp, Role role) {
         this.email = email;
         this.password = password;
-        this.phone_number = phone_number;
-        this.first_name = first_name;
+        this.phoneNumber = phoneNumber;
+        this.firstName = firstName;
         this.surname = surname;
-        this.date_of_birth = date_of_birth;
+        this.dateOfBirth = dateOfBirth;
         this.county = county;
         this.city = city;
         this.address = address;
@@ -67,7 +89,6 @@ public class User{
     }
 
     public User() {
-
     }
 
     public String getId() {
@@ -86,14 +107,6 @@ public class User{
         this.email = email;
     }
 
-    public String getPhone_number() {
-        return phone_number;
-    }
-
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -102,12 +115,20 @@ public class User{
         this.password = password;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getSurname() {
@@ -118,19 +139,19 @@ public class User{
         this.surname = surname;
     }
 
-    public LocalDate getDate_of_birth() {
-        return date_of_birth;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setDate_of_birth(LocalDate date_of_birth) {
-        this.date_of_birth = date_of_birth;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
-    public String getCounty() {
+    public County getCounty() {
         return county;
     }
 
-    public void setCounty(String county) {
+    public void setCounty(County county) {
         this.county = county;
     }
 
@@ -166,16 +187,25 @@ public class User{
         this.role = role;
     }
 
+    public List<AuthorizationRequest> getAuthorizationRequests() {
+        return authorizationRequests;
+    }
+
+    public void setAuthorizationRequests(List<AuthorizationRequest> authorizationRequests) {
+        this.authorizationRequests = authorizationRequests;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
                 ", email='" + email + '\'' +
-                ", phone_number='" + phone_number + '\'' +
-                ", first_name='" + first_name + '\'' +
+                ", password='" + password + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", firstName='" + firstName + '\'' +
                 ", surname='" + surname + '\'' +
-                ", date_of_birth=" + date_of_birth +
-                ", county='" + county + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", county=" + county +
                 ", city='" + city + '\'' +
                 ", address='" + address + '\'' +
                 ", cnp='" + cnp + '\'' +
