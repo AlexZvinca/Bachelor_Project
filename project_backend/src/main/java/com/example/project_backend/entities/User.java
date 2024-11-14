@@ -4,14 +4,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
 @Table(name="user_info")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User{
+public class User {
     @Id
     @GeneratedValue(generator = "county_based_id")
     @GenericGenerator(name = "county_based_id", strategy = "com.example.project_backend.entities.IdGenerator")

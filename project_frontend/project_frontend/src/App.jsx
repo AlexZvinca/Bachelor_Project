@@ -1,11 +1,12 @@
-import Header from './Header.jsx'
+import RoutesComponent from './routes';
 
 
 function App() {
-    return(
-        <Header>
-
-        </Header>
+    return (
+        <div className="App">
+            <RoutesComponent />
+        </div>
     );
 }
+
 export default App
