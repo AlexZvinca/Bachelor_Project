@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import '../styles/RegisterPage.css';
 
 function RegisterPage() {
@@ -8,7 +8,7 @@ function RegisterPage() {
         password: '',
         phoneNumber: '',
         firstName: '',
-        surname: '',
+        lastName: '',
         dateOfBirth: '',
         county: '',
         city: '',
@@ -31,7 +31,7 @@ function RegisterPage() {
     const handleRegister = (e) => {
         e.preventDefault();
 
-        // Example validation: ensure all fields are filled
+
         const emptyField = Object.values(formData).some(value => value === '');
         if (emptyField) {
             setError('Please fill all fields');
@@ -41,11 +41,10 @@ function RegisterPage() {
         setError('');
         setConfirmationMessage('A confirmation email has been sent to your email address.');
 
-        // Simulate an API request, which sends the confirmation email
+
         setTimeout(() => {
-            // Redirect to the login page after showing the confirmation message
             navigate('/login');
-        }, 3000);  // Wait for 3 seconds before redirecting
+        }, 3000);
     };
 
     const counties = [
@@ -107,11 +106,11 @@ function RegisterPage() {
                     />
                 </div>
                 <div className="inputGroup">
-                    <label>Surname:</label>
+                    <label>Last Name:</label>
                     <input
                         type="text"
-                        name="surname"
-                        value={formData.surname}
+                        name="lastName"
+                        value={formData.lastName}
                         onChange={handleChange}
                         required
                         className="input"
@@ -188,6 +187,13 @@ function RegisterPage() {
                 {confirmationMessage && <p className="confirmation-message">{confirmationMessage}</p>}
                 <button type="submit">Register</button>
             </form>
+
+            <div className="links">
+                <p>
+                    Already have an account?{' '}
+                    <Link to="/login" className="link">Log In</Link>
+                </p>
+            </div>
         </div>
     );
 }

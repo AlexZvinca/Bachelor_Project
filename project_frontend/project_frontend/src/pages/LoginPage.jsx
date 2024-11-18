@@ -18,7 +18,6 @@ function LoginPage() {
             return;
         }
 
-        // Clear previous errors
         setError(null);
 
         // Dummy authentication request - replace with actual API request

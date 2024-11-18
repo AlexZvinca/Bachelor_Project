@@ -27,7 +27,7 @@ public class SecurityConfiguration{
         return userService;
     }
 
-    
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

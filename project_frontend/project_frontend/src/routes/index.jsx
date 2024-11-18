@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
+import DashboardPage from "../pages/DashboardPage.jsx";
 
 function RoutesComponent() {
     return (
@@ -11,6 +12,7 @@ function RoutesComponent() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
             </Routes>
         </Router>
     );

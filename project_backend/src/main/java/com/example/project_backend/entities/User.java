@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name="user_info")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(generator = "county_based_id")
     @GenericGenerator(name = "county_based_id", strategy = "com.example.project_backend.entities.IdGenerator")
@@ -112,6 +112,7 @@ public class User {
         this.email = email;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -216,5 +217,35 @@ public class User {
                 ", cnp='" + cnp + '\'' +
                 ", role=" + role +
                 '}';
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
