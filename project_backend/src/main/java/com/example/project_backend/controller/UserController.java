@@ -1,14 +1,17 @@
 package com.example.project_backend.controller;
 
+import com.example.project_backend.dto.UserCreationDTO;
 import com.example.project_backend.entities.User;
 import com.example.project_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/user")
+@RequestMapping(path = "users")
 public class UserController {
 
     private final UserService userService;
@@ -19,17 +22,32 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getUsers(){
-        return userService.getUsers();
+    public ResponseEntity<List<User>> getUsers()
+    {
+        List<User> users = userService.getUsers();
+        if (users.isEmpty())
+        {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @PostMapping
-    public void registerUser(@RequestBody User user){
-        userService.addUser(user);
+    public ResponseEntity<User> addUser(@RequestBody UserCreationDTO user)
+    {
+        if (user.email() == null || user.password() == null)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        User newUser = userService.addNewUser(user);
+        if (newUser == null)
+        {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "{userId}")
-    public void deleteUser(@PathVariable("userId") String userId){
-        userService.deleteUser(userId);
-    }
 }

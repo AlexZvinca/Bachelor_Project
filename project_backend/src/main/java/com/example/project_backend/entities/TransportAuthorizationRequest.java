@@ -7,8 +7,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "authorization_request")
-public class AuthorizationRequest {
+@Table(name = "transport_authorization_request")
+public class TransportAuthorizationRequest {
     @Id
     @Column(length = 50, nullable = false)
     private String id;

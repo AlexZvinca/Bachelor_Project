@@ -3,20 +3,23 @@ package com.example.project_backend.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
+@Data
+@Builder
 @Entity
 @Table(name="user_info")
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User implements UserDetails {
+public class User{
     @Id
     @GeneratedValue(generator = "county_based_id")
     @GenericGenerator(name = "county_based_id", strategy = "com.example.project_backend.entities.IdGenerator")
@@ -36,7 +39,7 @@ public class User implements UserDetails {
     private String firstName;
 
     @Column(nullable = false)
-    private String surname;
+    private String lastName;
 
     @Column(name = "date_of_birth", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -59,146 +62,60 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Column(nullable = false)
-    private Role role;
+    private UserRole userRole;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AuthorizationRequest> authorizationRequests;
+    private List<TransportAuthorizationRequest> transportAuthorizationRequests;
 
-    public User(String id, String email, String password, String phoneNumber, String firstName, String surname, LocalDate dateOfBirth, County county, String city, String address, String cnp, Role role) {
+    public User(String id, String email, String password, String phoneNumber, String firstName, String lastName, LocalDate dateOfBirth, County county, String city, String address, String cnp, UserRole userRole) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
-        this.surname = surname;
+        this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.county = county;
         this.city = city;
         this.address = address;
         this.cnp = cnp;
-        this.role = role;
+        this.userRole = userRole;
     }
 
-    public User(String email, String password, String phoneNumber, String firstName, String surname, LocalDate dateOfBirth, County county, String city, String address, String cnp, Role role) {
+    public User(String email, String password, String phoneNumber, String firstName, String lastName, LocalDate dateOfBirth, County county, String city, String address, String cnp, UserRole userRole) {
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
-        this.surname = surname;
+        this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.county = county;
         this.city = city;
         this.address = address;
         this.cnp = cnp;
-        this.role = role;
+        this.userRole = userRole;
     }
 
-    public User() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
+    public User(String email, String password, String phoneNumber, String firstName, String lastName, LocalDate dateOfBirth, County county, String city, String address, String cnp) {
         this.email = email;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
-    }
-
-    public County getCounty() {
-        return county;
-    }
-
-    public void setCounty(County county) {
         this.county = county;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
         this.city = city;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getCnp() {
-        return cnp;
-    }
-
-    public void setCnp(String cnp) {
         this.cnp = cnp;
+        this.userRole = UserRole.REQUESTOR;
     }
 
-    public Role getRole() {
-        return role;
+    public List<TransportAuthorizationRequest> getAuthorizationRequests() {
+        return transportAuthorizationRequests;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public List<AuthorizationRequest> getAuthorizationRequests() {
-        return authorizationRequests;
-    }
-
-    public void setAuthorizationRequests(List<AuthorizationRequest> authorizationRequests) {
-        this.authorizationRequests = authorizationRequests;
+    public void setAuthorizationRequests(List<TransportAuthorizationRequest> transportAuthorizationRequests) {
+        this.transportAuthorizationRequests = transportAuthorizationRequests;
     }
 
     @Override
@@ -209,43 +126,13 @@ public class User implements UserDetails {
                 ", password='" + password + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", firstName='" + firstName + '\'' +
-                ", surname='" + surname + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", county=" + county +
                 ", city='" + city + '\'' +
                 ", address='" + address + '\'' +
                 ", cnp='" + cnp + '\'' +
-                ", role=" + role +
+                ", userRole=" + userRole +
                 '}';
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }

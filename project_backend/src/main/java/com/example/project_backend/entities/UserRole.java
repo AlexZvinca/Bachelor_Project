@@ -1,6 +1,6 @@
 package com.example.project_backend.entities;
 
-public enum Role {
+public enum UserRole {
     REQUESTOR,
     AUTHORITY,
     ADMIN

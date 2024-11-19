@@ -2,7 +2,7 @@ package com.example.project_backend.config;
 
 
 import com.example.project_backend.entities.County;
-import com.example.project_backend.entities.Role;
+import com.example.project_backend.entities.UserRole;
 import com.example.project_backend.entities.User;
 import com.example.project_backend.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -29,7 +29,7 @@ public class UserConfig {
                     "Orastie",
                     "Strada yy, nr. xx",
                     "5555555555555",
-                    Role.REQUESTOR
+                    UserRole.REQUESTOR
             );
 
             User user2 = new User(
@@ -43,7 +43,7 @@ public class UserConfig {
                     "Tg Jiu",
                     "Strada yy, nr. xx",
                     "5555555555556",
-                    Role.REQUESTOR
+                    UserRole.REQUESTOR
             );
 
             userRepository.saveAll(List.of(user1, user2));
