@@ -1,8 +1,56 @@
 import React, { useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import '../styles/RegisterPage.css';
+import axios from "axios";
 
 function RegisterPage() {
+
+    const countyMapping = {
+        "Alba": "AL",
+        "Arad": "AR",
+        "Argeș": "AG",
+        "Bacău": "BC",
+        "Bihor": "BH",
+        "Bistrița-Năsăud": "BN",
+        "Botoșani": "BS",
+        "Brașov": "BV",
+        "Brăila": "BR",
+        "Buzău": "BZ",
+        "Caraș-Severin": "CS",
+        "Călărași": "CL",
+        "Cluj": "CJ",
+        "Constanța": "CS",
+        "Covasna": "CV",
+        "Dâmbovița": "DB",
+        "Dolj": "DO",
+        "Galați": "GL",
+        "Giurgiu": "GR",
+        "Gorj": "GJ",
+        "Harghita": "HR",
+        "Hunedoara": "HD",
+        "Ialomița": "IL",
+        "Iași": "IS",
+        "Ilfov": "IF",
+        "Maramureș": "MM",
+        "Mehedinți": "MH",
+        "Mureș": "MS",
+        "Neamț": "NT",
+        "Olt": "OT",
+        "Prahova": "PH",
+        "Sălaj": "SJ",
+        "Satu Mare": "SM",
+        "Sibiu": "SB",
+        "Suceava": "SV",
+        "Teleorman": "TR",
+        "Timiș": "TM",
+        "Tulcea": "TL",
+        "Vaslui": "VS",
+        "Vâlcea": "VL",
+        "Vrancea": "VR",
+        "București": "B",
+        "Foreign Country": "FC"
+    };
+
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -28,7 +76,7 @@ function RegisterPage() {
         }));
     };
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
 
 
@@ -41,10 +89,15 @@ function RegisterPage() {
         setError('');
         setConfirmationMessage('A confirmation email has been sent to your email address.');
 
-
-        setTimeout(() => {
-            navigate('/login');
-        }, 3000);
+        axios.post('http://localhost:8080/users', formData)
+            .then(function (response) {
+                console.log(response);
+                navigate('/login');
+            })
+            .catch(function (error) {
+                console.log(error);
+                setError('Registration failed. Please try again.');
+            });
     };
 
     const counties = [
@@ -140,7 +193,7 @@ function RegisterPage() {
                     >
                         <option value="">Select County</option>
                         {counties.map((county, index) => (
-                            <option key={index} value={county}>
+                            <option key={index} value={countyMapping[county]}>
                                 {county}
                             </option>
                         ))}
