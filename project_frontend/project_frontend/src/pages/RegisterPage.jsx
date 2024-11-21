@@ -6,7 +6,7 @@ import axios from "axios";
 function RegisterPage() {
 
     const countyMapping = {
-        "Alba": "AL",
+        "Alba": "AB",
         "Arad": "AR",
         "Argeș": "AG",
         "Bacău": "BC",
@@ -22,7 +22,7 @@ function RegisterPage() {
         "Constanța": "CS",
         "Covasna": "CV",
         "Dâmbovița": "DB",
-        "Dolj": "DO",
+        "Dolj": "DJ",
         "Galați": "GL",
         "Giurgiu": "GR",
         "Gorj": "GJ",

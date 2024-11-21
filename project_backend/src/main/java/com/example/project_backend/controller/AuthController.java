@@ -9,13 +9,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping()
+
 public class AuthController {
 
     @Autowired
@@ -33,6 +31,7 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/token")
     public String loginUser(@RequestBody UserAuthenticationDTO authenticationRequest) throws Exception {
         authenticationManager.authenticate(

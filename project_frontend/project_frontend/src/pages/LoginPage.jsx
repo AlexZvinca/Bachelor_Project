@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';  // Import Link for navigation
-import '../styles/LoginPage.css';  // Import the CSS for LoginPage
+import { Link, useNavigate } from 'react-router-dom';  // Import Link for navigation
+import '../styles/LoginPage.css';
+import axios from "axios";  // Import the CSS for LoginPage
 
 function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+
+    const navigate = useNavigate();
 
     const handleEmailChange = (e) => setEmail(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -20,23 +23,15 @@ function LoginPage() {
 
         setError(null);
 
-        // Dummy authentication request - replace with actual API request
-        /*try {
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
+        axios.post('http://localhost:8080/token', {email, password})
+            .then(function (response) {
+                console.log(response);
+                navigate('/dashboard');
+            })
+            .catch(function (error) {
+                console.log(error);
+                setError('Login failed. Please try again.');
             });
-
-            if (response.ok) {
-                // Assuming the backend redirects or provides a token
-                console.log('Login successful');
-            } else {
-                setError('Invalid email or password');
-            }
-        } catch (error) {
-            setError('An error occurred. Please try again.');
-        }*/
     };
 
     return (
