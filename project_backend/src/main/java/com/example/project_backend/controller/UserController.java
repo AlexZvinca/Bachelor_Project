@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "users")
-@CrossOrigin(origins = "http://localhost:5173")
+
 public class UserController {
 
     private final UserService userService;
@@ -34,7 +34,13 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable String id) {
+        User user = userService.getUserById(id);
+        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
+    }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping
     public ResponseEntity<User> addUser(@RequestBody UserCreationDTO user)
     {

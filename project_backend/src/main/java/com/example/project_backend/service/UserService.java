@@ -35,7 +35,6 @@ public class UserService{
 
     public User getUserById(String id)
     {
-
         return userRepository.findById(id).orElse(null);
     }
 

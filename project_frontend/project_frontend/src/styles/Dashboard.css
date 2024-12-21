@@ -1,0 +1,70 @@
+.dashboard-container {
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    background-color: #328f39;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.nav-item {
+    padding: 10px 20px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.nav-item.active {
+    color: #fff;
+    background-color: #53b02b;
+    border-radius: 5px;
+}
+
+.content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.authorization-list {
+    list-style: none;
+    padding: 0;
+}
+
+.authorization-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.authorization-item:last-child {
+    border-bottom: none;
+}
+
+.new-authorization-btn {
+    margin-top: 20px;
+    padding: 10px 15px;
+    color: #fff;
+    background-color: #53b02b;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.new-authorization-btn:hover {
+    background-color: c;
+}
+
+.profile p {
+    margin: 5px 0;
+}

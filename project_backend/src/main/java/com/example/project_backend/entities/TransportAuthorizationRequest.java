@@ -3,10 +3,18 @@ package com.example.project_backend.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Data
+@Builder
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "transport_authorization_request")
 public class TransportAuthorizationRequest {
     @Id
@@ -35,8 +43,20 @@ public class TransportAuthorizationRequest {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;  // Assuming Status is an enum representing different statuses
+    private Status status;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    public TransportAuthorizationRequest(String id, User user, County county, String idCopy, String licensePlateNumber, String vehicleIdentification, String description) {
+        this.id = id;
+        this.user = user;
+        this.county = county;
+        this.idCopy = idCopy;
+        this.licensePlateNumber = licensePlateNumber;
+        this.vehicleIdentification = vehicleIdentification;
+        this.description = description;
+    }
+
+
 }

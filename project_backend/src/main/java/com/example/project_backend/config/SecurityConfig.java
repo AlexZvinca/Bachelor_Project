@@ -42,11 +42,12 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorizeRequests) -> authorizeRequests
                         .requestMatchers(
-                                "/error").permitAll())
-                .authorizeHttpRequests((authorizeRequests) -> authorizeRequests
-                        .requestMatchers(HttpMethod.POST, //only if we add the endpoints to the one before this it helps
+                                "/error",
                                 "/users",
                                 "/token").permitAll())
+                /*.authorizeHttpRequests((authorizeRequests) -> authorizeRequests
+                        .requestMatchers(HttpMethod.POST, //only if we add the endpoints to the one before this it helps
+                                "/token").permitAll())*/
                .authorizeHttpRequests((authorizeRequests) -> authorizeRequests
                         .anyRequest().authenticated())
                 .sessionManagement((sessionManagement) -> sessionManagement
