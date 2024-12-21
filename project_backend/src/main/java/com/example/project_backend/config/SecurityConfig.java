@@ -44,7 +44,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/error",
                                 "/users",
-                                "/token").permitAll())
+                                "/users/**",
+                                "/token",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**").permitAll())
                 /*.authorizeHttpRequests((authorizeRequests) -> authorizeRequests
                         .requestMatchers(HttpMethod.POST, //only if we add the endpoints to the one before this it helps
                                 "/token").permitAll())*/
