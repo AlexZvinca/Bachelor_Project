@@ -1,5 +1,6 @@
 package com.example.project_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
@@ -19,10 +20,20 @@ import java.time.LocalDateTime;
 public class TransportAuthorizationRequest {
     @Id
     @Column(length = 50, nullable = false)
-    private String id;
+    @SequenceGenerator(
+            name = "requests_sequence",
+            sequenceName = "requests_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "requests_sequence"
+    )
+    private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @Enumerated(EnumType.STRING)
@@ -48,7 +59,7 @@ public class TransportAuthorizationRequest {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public TransportAuthorizationRequest(String id, User user, County county, String idCopy, String licensePlateNumber, String vehicleIdentification, String description) {
+    public TransportAuthorizationRequest(int id, User user, County county, String idCopy, String licensePlateNumber, String vehicleIdentification, String description) {
         this.id = id;
         this.user = user;
         this.county = county;
@@ -56,7 +67,20 @@ public class TransportAuthorizationRequest {
         this.licensePlateNumber = licensePlateNumber;
         this.vehicleIdentification = vehicleIdentification;
         this.description = description;
+
+        this.status =  Status.PENDING;
+        this.createdAt = LocalDateTime.now();
     }
 
+    public TransportAuthorizationRequest(User user, County county, String idCopy, String licensePlateNumber, String vehicleIdentification, String description) {
+        this.user = user;
+        this.county = county;
+        this.idCopy = idCopy;
+        this.licensePlateNumber = licensePlateNumber;
+        this.vehicleIdentification = vehicleIdentification;
+        this.description = description;
 
+        this.status =  Status.PENDING;
+        this.createdAt = LocalDateTime.now();
+    }
 }

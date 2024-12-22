@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/Dashboard.css';
 
 function Dashboard() {
@@ -7,7 +7,7 @@ function Dashboard() {
     const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
-
+    
     return (
         <div className="dashboard-container">
             <nav className="navbar">

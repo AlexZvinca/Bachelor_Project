@@ -1,6 +1,7 @@
 package com.example.project_backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.List;
 @Table(name="user_info")
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class User{
     @Id
     @GeneratedValue(generator = "county_based_id")
@@ -65,6 +66,7 @@ public class User{
     private UserRole userRole;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<TransportAuthorizationRequest> transportAuthorizationRequests;
 
     public User(String id, String email, String password, String phoneNumber, String firstName, String lastName, LocalDate dateOfBirth, County county, String city, String address, String cnp, UserRole userRole) {
@@ -108,14 +110,6 @@ public class User{
         this.address = address;
         this.cnp = cnp;
         this.userRole = UserRole.REQUESTOR;
-    }
-
-    public List<TransportAuthorizationRequest> getAuthorizationRequests() {
-        return transportAuthorizationRequests;
-    }
-
-    public void setAuthorizationRequests(List<TransportAuthorizationRequest> transportAuthorizationRequests) {
-        this.transportAuthorizationRequests = transportAuthorizationRequests;
     }
 
     @Override

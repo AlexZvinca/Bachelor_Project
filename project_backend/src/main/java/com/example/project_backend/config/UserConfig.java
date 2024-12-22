@@ -2,8 +2,10 @@ package com.example.project_backend.config;
 
 
 import com.example.project_backend.entities.County;
+import com.example.project_backend.entities.TransportAuthorizationRequest;
 import com.example.project_backend.entities.UserRole;
 import com.example.project_backend.entities.User;
+import com.example.project_backend.repository.TransportAuthorizationRequestRepository;
 import com.example.project_backend.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +18,7 @@ import java.util.List;
 public class UserConfig {
 
     @Bean
-    CommandLineRunner commandLineRunner(UserRepository userRepository) {
+    CommandLineRunner commandLineRunner(UserRepository userRepository, TransportAuthorizationRequestRepository transportAuthorizationRequestRepository) {
         return args -> {
             User user1 = new User(
                     "alexandru.zvinca@student.upt.ro",
@@ -47,6 +49,26 @@ public class UserConfig {
             );
 
             userRepository.saveAll(List.of(user1, user2));
+
+            TransportAuthorizationRequest request1 = new TransportAuthorizationRequest(
+                    user1,
+                    County.HD,
+                    "ID Copy Content 1",
+                    "HD-1234-ABC",
+                    "VIN1234567890",
+                    "Request for heavy goods transport in Hunedoara County"
+            );
+
+            TransportAuthorizationRequest request2 = new TransportAuthorizationRequest(
+                    user1,
+                    County.TM,
+                    "ID Copy Content 2",
+                    "TM-5678-DEF",
+                    "VIN0987654321",
+                    "Request for light goods transport in Timis County"
+            );
+
+            transportAuthorizationRequestRepository.saveAll(List.of(request1, request2));
         };
     }
 }
