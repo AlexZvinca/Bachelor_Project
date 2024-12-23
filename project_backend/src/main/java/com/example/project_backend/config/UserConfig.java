@@ -7,9 +7,11 @@ import com.example.project_backend.entities.UserRole;
 import com.example.project_backend.entities.User;
 import com.example.project_backend.repository.TransportAuthorizationRequestRepository;
 import com.example.project_backend.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,12 +19,15 @@ import java.util.List;
 @Configuration
 public class UserConfig {
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Bean
     CommandLineRunner commandLineRunner(UserRepository userRepository, TransportAuthorizationRequestRepository transportAuthorizationRequestRepository) {
         return args -> {
             User user1 = new User(
                     "alexandru.zvinca@student.upt.ro",
-                    "password",
+                    passwordEncoder.encode("password"),
                     "0700000000",
                     "Alexandru - Mihai",
                     "Zvinca",
@@ -36,7 +41,7 @@ public class UserConfig {
 
             User user2 = new User(
                     "alexandru.nicolae@student.upt.ro",
-                    "password2",
+                    passwordEncoder.encode("password2"),
                     "0710000000",
                     "Alexandru - George",
                     "Nicolae",

@@ -26,8 +26,12 @@ function LoginPage() {
         axios.post('http://localhost:8080/token', {email, password})
             .then(function (response) {
                 console.log(response);
-                const token = response.data.token;
+                const { userId, token } = response.data;
+
                 localStorage.setItem('token', token);
+                localStorage.setItem('userId', userId);
+                console.log(localStorage.getItem('token'));
+                console.log(localStorage.getItem('userId'));
                 navigate('/dashboard');
             })
             .catch(function (error) {

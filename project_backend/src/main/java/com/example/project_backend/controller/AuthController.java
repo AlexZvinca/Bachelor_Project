@@ -1,6 +1,8 @@
 package com.example.project_backend.controller;
 
+import com.example.project_backend.dto.AuthDTO;
 import com.example.project_backend.dto.UserAuthenticationDTO;
+import com.example.project_backend.entities.User;
 import com.example.project_backend.repository.UserRepository;
 import com.example.project_backend.service.CustomUserDetailsService;
 import com.example.project_backend.utils.JwtUtil;
@@ -33,14 +35,16 @@ public class AuthController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/token")
-    public String loginUser(@RequestBody UserAuthenticationDTO authenticationRequest) throws Exception {
+    public AuthDTO loginUser(@RequestBody UserAuthenticationDTO authenticationRequest) throws Exception {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticationRequest.email(), authenticationRequest.password())
         );
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.email());
+        User user = userRepository.findByEmail(authenticationRequest.email());
 
-        return jwtUtil.generateToken(userDetails);
+        //return jwtUtil.generateToken(userDetails);
+        return new AuthDTO(user.getId(), jwtUtil.generateToken(userDetails));
     }
 
 }
