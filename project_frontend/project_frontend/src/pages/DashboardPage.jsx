@@ -108,12 +108,12 @@ function Dashboard() {
                                         <p><strong>Vehicle:</strong> {auth.licensePlateNumber}</p>
                                         <p><strong>Authorization ID:</strong> {auth.id}</p>
                                         <p><strong>County:</strong> {auth.county}</p>
-                                        <p><strong>Status:</strong> {auth.status}</p>
                                         <p><strong>Description:</strong> {auth.description}</p>
                                         <p><strong>Created At:</strong> {new Date(auth.createdAt).toLocaleString()}</p>
                                         <p><strong>Requested By:</strong> {auth.userId}</p>
                                         {userRole === 'authority' &&
                                             <p><strong>Created By:</strong> {auth.createdBy}</p>}
+                                        <p><strong>Status:</strong> {auth.status}</p>
                                     </li>
                                 ))}
                             </ul>

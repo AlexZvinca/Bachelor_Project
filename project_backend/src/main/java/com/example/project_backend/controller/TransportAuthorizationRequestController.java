@@ -77,4 +77,13 @@ public class TransportAuthorizationRequestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping(path = "status/{id}")
+    public ResponseEntity<Void> changeTransportAuthorizationRequestStatus(@PathVariable Integer id,
+                                               @RequestBody String status)
+    {
+        transportAuthorizationRequestService.changeTransportAuthorizationRequestStatus(id, status);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

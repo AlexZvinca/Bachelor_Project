@@ -3,9 +3,7 @@ package com.example.project_backend.service;
 import com.example.project_backend.dto.TransportAuthorizationRequestCountyDTO;
 import com.example.project_backend.dto.TransportAuthorizationRequestDTO;
 import com.example.project_backend.dto.UserCreationDTO;
-import com.example.project_backend.entities.County;
-import com.example.project_backend.entities.TransportAuthorizationRequest;
-import com.example.project_backend.entities.User;
+import com.example.project_backend.entities.*;
 import com.example.project_backend.repository.TransportAuthorizationRequestRepository;
 import com.example.project_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +65,27 @@ public class TransportAuthorizationRequestService {
                         transportAuthorizationRequest.getCreatedAt(),
                         transportAuthorizationRequest.getUser().getId())
                 ).toList();
+    }
+
+    public void changeTransportAuthorizationRequestStatus(Integer id, String status)
+    {
+        TransportAuthorizationRequest transportAuthorizationRequest = transportAuthorizationRequestRepository.findById(id).orElseThrow();
+        System.out.println(status);
+        status = status.substring(1, status.length() - 1);
+
+        switch (status)
+        {
+            case "GRANTED":
+                transportAuthorizationRequest.setStatus(Status.GRANTED);
+                break;
+            case "NOT_GRANTED":
+                transportAuthorizationRequest.setStatus(Status.NOT_GRANTED);
+                break;
+            default:
+                throw new RuntimeException("Invalid status");
+        }
+
+        transportAuthorizationRequestRepository.save(transportAuthorizationRequest);
     }
 
 }
