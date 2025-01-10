@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Dashboard.css';
 
 function Dashboard() {
@@ -8,6 +9,7 @@ function Dashboard() {
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     const userId = localStorage.getItem('userId');
 
@@ -53,6 +55,14 @@ function Dashboard() {
 
     const handleTabClick = (tab) => setActiveTab(tab);
 
+    const handleLogOut = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        //role will also need to be removed
+
+       navigate('/login');
+    };
+
     return (
         <div className="dashboard-container">
             <nav className="navbar">
@@ -94,7 +104,7 @@ function Dashboard() {
                             <p>No authorizations found.</p>
                         )}
                         <button
-                            className="new-authorization-btn"
+                            className="dashboard-btn"
                             onClick={() => window.location.href = '/new-authorization'}
                         >
                             Request a New Authorization
@@ -112,8 +122,12 @@ function Dashboard() {
                         <p><strong>Address:</strong> {userData.address}, {userData.city}, {userData.county}</p>
                         <p><strong>CNP:</strong> {userData.cnp}</p>
                         <p><strong>User Role:</strong> {userData.userRole}</p>
+
+                        <button className="dashboard-btn" onClick={handleLogOut}>
+                            Log Out
+                        </button>
                     </div>
-                )}
+                    )}
             </div>
         </div>
     );

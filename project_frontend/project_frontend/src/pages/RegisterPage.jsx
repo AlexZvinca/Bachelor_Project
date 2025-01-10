@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import '../styles/RegisterPage.css';
 import axios from "axios";
@@ -54,6 +54,7 @@ function RegisterPage() {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
+        confirmPassword: '',
         phoneNumber: '',
         firstName: '',
         lastName: '',
@@ -68,6 +69,12 @@ function RegisterPage() {
     const [confirmationMessage, setConfirmationMessage] = useState('');
     const navigate = useNavigate();
 
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -79,17 +86,33 @@ function RegisterPage() {
     const handleRegister = async (e) => {
         e.preventDefault();
 
+        const { confirmPassword, ...payload } = formData;
 
-        const emptyField = Object.values(formData).some(value => value === '');
+        const emptyField = Object.values(payload).some(value => value === '');
         if (emptyField) {
             setError('Please fill all fields');
+            return;
+        }
+
+        if (formData.password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+
+        if (!validateEmail(formData.email)) {
+            setError('Please enter a valid email address');
+            return;
+        }
+
+        if (!/^\d{13}$/.test(formData.cnp)) {
+            setError('CNP must contain exactly 13 digits');
             return;
         }
 
         setError('');
         setConfirmationMessage('A confirmation email has been sent to your email address.');
 
-        axios.post('http://localhost:8080/users', formData)
+        axios.post('http://localhost:8080/users', payload)
             .then(function (response) {
                 console.log(response);
                 navigate('/login');
@@ -134,7 +157,17 @@ function RegisterPage() {
                         className="input"
                     />
                 </div>
-
+                <div className="inputGroup">
+                    <label>Confirm Password:</label>
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        required
+                        className="input"
+                    />
+                </div>
                 <div className="inputGroup">
                     <label>Phone Number:</label>
                     <input
