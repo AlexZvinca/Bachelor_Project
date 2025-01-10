@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/RegisterPage.css';
@@ -52,7 +52,6 @@ function NewAuthorizationForm() {
 
     const [formData, setFormData] = useState({
         county: '',
-        idCopy: '',
         licensePlateNumber: '',
         vehicleIdentification: '',
         description: ''
@@ -88,7 +87,6 @@ function NewAuthorizationForm() {
             await axios.post('http://localhost:8080/authorizationRequest', {
                 userId,
                 county: formData.county,
-                idCopy: formData.idCopy,
                 licensePlateNumber: formData.licensePlateNumber,
                 vehicleIdentification: formData.vehicleIdentification,
                 description: formData.description,
@@ -128,18 +126,6 @@ function NewAuthorizationForm() {
                 </div>
 
                 <div className="inputGroup">
-                    <label>ID Copy:</label>
-                    <input
-                        type="text"
-                        name="idCopy"
-                        value={formData.idCopy}
-                        onChange={handleChange}
-                        required
-                        className="input"
-                    />
-                </div>
-
-                <div className="inputGroup">
                     <label>License Plate Number:</label>
                     <input
                         type="text"
@@ -164,7 +150,7 @@ function NewAuthorizationForm() {
                 </div>
 
                 <div className="inputGroup">
-                    <label>Description:</label>
+                    <label>Description (make sure to include essential details, like scope, period, quantity, location of forest etc.):</label>
                     <textarea
                         name="description"
                         value={formData.description}

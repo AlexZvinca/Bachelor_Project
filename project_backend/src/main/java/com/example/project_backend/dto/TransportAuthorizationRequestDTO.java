@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 public record TransportAuthorizationRequestDTO(
           String userId,
           String county,
-          String idCopy,
           String licensePlateNumber,
           String vehicleIdentification,
           String description ){

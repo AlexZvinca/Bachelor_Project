@@ -1,5 +1,6 @@
 package com.example.project_backend.service;
 
+import com.example.project_backend.dto.TransportAuthorizationRequestCountyDTO;
 import com.example.project_backend.dto.TransportAuthorizationRequestDTO;
 import com.example.project_backend.dto.UserCreationDTO;
 import com.example.project_backend.entities.County;
@@ -35,7 +36,6 @@ public class TransportAuthorizationRequestService {
         TransportAuthorizationRequest newTransportAuthorizationRequest = new TransportAuthorizationRequest(
                 userOptional.get(),
                 County.valueOf(transportAuthorizationRequest.county()),
-                transportAuthorizationRequest.idCopy(),
                 transportAuthorizationRequest.licensePlateNumber(),
                 transportAuthorizationRequest.vehicleIdentification(),
                 transportAuthorizationRequest.description()
@@ -51,6 +51,22 @@ public class TransportAuthorizationRequestService {
 
     public List<TransportAuthorizationRequest> getRequestsByUserId(String userId) {
         return transportAuthorizationRequestRepository.findAllByUserId(userId);
+    }
+
+    public List<TransportAuthorizationRequestCountyDTO> getRequestsByCounty(County county) {
+        List<TransportAuthorizationRequest> transportAuthorizationRequests = transportAuthorizationRequestRepository.findAllByCounty(county);
+
+        return transportAuthorizationRequests.stream()
+                .map(transportAuthorizationRequest -> new TransportAuthorizationRequestCountyDTO(
+                        transportAuthorizationRequest.getId(),
+                        transportAuthorizationRequest.getCounty(),
+                        transportAuthorizationRequest.getLicensePlateNumber(),
+                        transportAuthorizationRequest.getVehicleIdentification(),
+                        transportAuthorizationRequest.getDescription(),
+                        transportAuthorizationRequest.getStatus(),
+                        transportAuthorizationRequest.getCreatedAt(),
+                        transportAuthorizationRequest.getUser().getId())
+                ).toList();
     }
 
 }

@@ -44,7 +44,7 @@ public class AuthController {
         User user = userRepository.findByEmail(authenticationRequest.email());
 
         //return jwtUtil.generateToken(userDetails);
-        return new AuthDTO(user.getId(), jwtUtil.generateToken(userDetails));
+        return new AuthDTO(user.getId(), jwtUtil.generateToken(userDetails), user.getUserRole(), user.getCounty());
     }
 
 }

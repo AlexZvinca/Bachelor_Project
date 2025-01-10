@@ -58,7 +58,6 @@ public class UserConfig {
             TransportAuthorizationRequest request1 = new TransportAuthorizationRequest(
                     user1,
                     County.HD,
-                    "ID Copy Content 1",
                     "HD-1234-ABC",
                     "VIN1234567890",
                     "Request for heavy goods transport in Hunedoara County"
@@ -67,7 +66,6 @@ public class UserConfig {
             TransportAuthorizationRequest request2 = new TransportAuthorizationRequest(
                     user1,
                     County.TM,
-                    "ID Copy Content 2",
                     "TM-5678-DEF",
                     "VIN0987654321",
                     "Request for light goods transport in Timis County"

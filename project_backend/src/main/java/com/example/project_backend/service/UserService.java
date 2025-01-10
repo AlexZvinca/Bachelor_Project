@@ -124,6 +124,28 @@ public class UserService{
         userRepository.deleteById(userId);
     }
 
+    public void changeUserRole(String id, String role)
+    {
+        User user = userRepository.findById(id).orElseThrow();
+
+        System.out.println(role);
+        role = role.substring(1, role.length() - 1);
+
+        switch (role)
+        {
+            case "AUTHORITY":
+                user.setUserRole(UserRole.AUTHORITY);
+                break;
+            case "REQUESTOR":
+                user.setUserRole(UserRole.REQUESTOR);
+                break;
+            default:
+                throw new RuntimeException("Invalid role");
+        }
+
+        userRepository.save(user);
+    }
+
 
 
 }

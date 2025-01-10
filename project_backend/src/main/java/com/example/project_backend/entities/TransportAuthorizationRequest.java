@@ -40,9 +40,6 @@ public class TransportAuthorizationRequest {
     @Column(name = "county", length = 2, nullable = false)
     private County county;
 
-    @Column(name = "id_copy", columnDefinition = "TEXT", nullable = false)
-    private String idCopy;
-
     @Column(name = "license_plate_number", length = 15, nullable = false)
     private String licensePlateNumber;
 
@@ -59,11 +56,10 @@ public class TransportAuthorizationRequest {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public TransportAuthorizationRequest(int id, User user, County county, String idCopy, String licensePlateNumber, String vehicleIdentification, String description) {
+    public TransportAuthorizationRequest(int id, User user, County county, String licensePlateNumber, String vehicleIdentification, String description) {
         this.id = id;
         this.user = user;
         this.county = county;
-        this.idCopy = idCopy;
         this.licensePlateNumber = licensePlateNumber;
         this.vehicleIdentification = vehicleIdentification;
         this.description = description;
@@ -72,14 +68,12 @@ public class TransportAuthorizationRequest {
         this.createdAt = LocalDateTime.now();
     }
 
-    public TransportAuthorizationRequest(User user, County county, String idCopy, String licensePlateNumber, String vehicleIdentification, String description) {
+    public TransportAuthorizationRequest(User user, County county, String licensePlateNumber, String vehicleIdentification, String description) {
         this.user = user;
         this.county = county;
-        this.idCopy = idCopy;
         this.licensePlateNumber = licensePlateNumber;
         this.vehicleIdentification = vehicleIdentification;
         this.description = description;
-
         this.status =  Status.PENDING;
         this.createdAt = LocalDateTime.now();
     }

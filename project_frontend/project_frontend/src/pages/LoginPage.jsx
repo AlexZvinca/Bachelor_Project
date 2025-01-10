@@ -26,12 +26,18 @@ function LoginPage() {
         axios.post('http://localhost:8080/token', {email, password})
             .then(function (response) {
                 console.log(response);
-                const { userId, token } = response.data;
+                const { userId, token, role, county } = response.data;
 
                 localStorage.setItem('token', token);
                 localStorage.setItem('userId', userId);
+                localStorage.setItem('role', role);
+                localStorage.setItem('county', county);
+
                 console.log(localStorage.getItem('token'));
                 console.log(localStorage.getItem('userId'));
+                console.log(localStorage.getItem('role'));
+                console.log(localStorage.getItem('county'));
+
                 navigate('/dashboard');
             })
             .catch(function (error) {

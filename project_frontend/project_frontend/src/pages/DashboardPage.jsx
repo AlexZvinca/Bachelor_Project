@@ -12,6 +12,8 @@ function Dashboard() {
     const navigate = useNavigate();
 
     const userId = localStorage.getItem('userId');
+    const userRole = localStorage.getItem('role');
+    const userCounty = localStorage.getItem('county');
 
     useEffect(() => {
         if (activeTab === 'Authorizations') {
@@ -25,9 +27,15 @@ function Dashboard() {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get(`http://localhost:8080/authorizationRequest/user/${userId}`, {
+            const url =
+                userRole === 'AUTHORITY'
+                    ? `http://localhost:8080/authorizationRequest/county/${userCounty}`
+                    : `http://localhost:8080/authorizationRequest/user/${userId}`;
+
+            const response = await axios.get(url, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             });
+            console.log('Fetched Authorizations:', response.data);
             setAuthorizations(response.data || []);
         } catch (err) {
             setError('Failed to fetch authorizations. Please try again later.');
@@ -45,6 +53,7 @@ function Dashboard() {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             });
             setUserData(response.data);
+
         } catch (err) {
             setError('Failed to fetch user profile. Please try again later.');
             console.error(err);
@@ -58,7 +67,8 @@ function Dashboard() {
     const handleLogOut = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("userId");
-        //role will also need to be removed
+        localStorage.removeItem("role");
+        localStorage.removeItem("county");
 
        navigate('/login');
     };
@@ -86,7 +96,11 @@ function Dashboard() {
 
                 {activeTab === 'Authorizations' && !loading && !error && (
                     <div className="authorizations">
-                        <h2>Your Authorizations</h2>
+                        <h2>
+                            {userRole === 'AUTHORITY'
+                                ? `Requests from ${userCounty} County`
+                                : 'Your Authorizations'}
+                        </h2>
                         {authorizations.length > 0 ? (
                             <ul className="authorization-list">
                                 {authorizations.map((auth) => (
@@ -97,18 +111,23 @@ function Dashboard() {
                                         <p><strong>Status:</strong> {auth.status}</p>
                                         <p><strong>Description:</strong> {auth.description}</p>
                                         <p><strong>Created At:</strong> {new Date(auth.createdAt).toLocaleString()}</p>
+                                        <p><strong>Requested By:</strong> {auth.userId}</p>
+                                        {userRole === 'authority' &&
+                                            <p><strong>Created By:</strong> {auth.createdBy}</p>}
                                     </li>
                                 ))}
                             </ul>
                         ) : (
                             <p>No authorizations found.</p>
                         )}
-                        <button
-                            className="dashboard-btn"
-                            onClick={() => window.location.href = '/new-authorization'}
-                        >
-                            Request a New Authorization
-                        </button>
+                        {userRole !== 'AUTHORITY' && (
+                            <button
+                                className="dashboard-btn"
+                                onClick={() => window.location.href = '/new-authorization'}
+                            >
+                                Request a New Authorization
+                            </button>
+                        )}
                     </div>
                 )}
 

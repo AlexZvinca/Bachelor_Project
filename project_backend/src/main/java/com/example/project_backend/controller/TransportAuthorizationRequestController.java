@@ -1,7 +1,9 @@
 package com.example.project_backend.controller;
 
+import com.example.project_backend.dto.TransportAuthorizationRequestCountyDTO;
 import com.example.project_backend.dto.TransportAuthorizationRequestDTO;
 import com.example.project_backend.dto.UserCreationDTO;
+import com.example.project_backend.entities.County;
 import com.example.project_backend.entities.TransportAuthorizationRequest;
 import com.example.project_backend.entities.User;
 import com.example.project_backend.service.TransportAuthorizationRequestService;
@@ -40,8 +42,39 @@ public class TransportAuthorizationRequestController {
     public ResponseEntity<List<TransportAuthorizationRequest>> getRequestsByUserId(@PathVariable String userId) {
         List<TransportAuthorizationRequest> requests = transportAuthorizationRequestService.getRequestsByUserId(userId);
         if (requests.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return new ResponseEntity<>(requests, HttpStatus.OK);
         }
         return ResponseEntity.ok(requests);
+    }
+
+//    @GetMapping("/county/{county}")
+//    public ResponseEntity<List<TransportAuthorizationRequest>> getRequestsByCounty(@PathVariable String county) {
+//        try {
+//            County countyEnum = County.valueOf(county);
+//            List<TransportAuthorizationRequest> requests = transportAuthorizationRequestService.getRequestsByCounty(countyEnum);
+//            if (requests.isEmpty()) {
+//                return new ResponseEntity<>(requests, HttpStatus.OK);
+//            }
+//            return ResponseEntity.ok(requests);
+//        } catch (IllegalArgumentException e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+    @GetMapping("/county/{county}")
+    public ResponseEntity<List<TransportAuthorizationRequestCountyDTO>> getRequestsByCounty(@PathVariable String county) {
+        try {
+            County countyEnum = County.valueOf(county.toUpperCase());
+            List<TransportAuthorizationRequestCountyDTO> requests = transportAuthorizationRequestService.getRequestsByCounty(countyEnum);
+
+            if (requests.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return ResponseEntity.ok(requests);
+
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
