@@ -10,6 +10,7 @@ function Dashboard() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const [statusUpdates, setStatusUpdates] = useState({});
 
     const userId = localStorage.getItem('userId');
     const userRole = localStorage.getItem('role');
@@ -73,6 +74,48 @@ function Dashboard() {
        navigate('/login');
     };
 
+    const handleStatusChange = (id, status) => {
+        setStatusUpdates((prev) => ({
+            ...prev,
+            [id]: { ...prev[id], status },
+        }));
+    };
+
+    const handleCommentsChange = (id, comments) => {
+        setStatusUpdates((prev) => ({
+            ...prev,
+            [id]: { ...prev[id], comments },
+        }));
+    };
+
+    const handleSubmit = async (id) => {
+        const { status, comments } = statusUpdates[id] || {};
+        if (!status) {
+            alert('Please select a status.');
+            return;
+        }
+
+        try {
+            await axios.put(
+                `http://localhost:8080/authorizationRequest/status-motivation/${id}`,
+                { status, comments },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            alert('Status updated successfully!');
+
+            fetchAuthorizations();
+        } catch (err) {
+            console.error('Error updating status:', err);
+            alert('Failed to update status. Please try again later.');
+        }
+    };
+
     return (
         <div className="dashboard-container">
             <nav className="navbar">
@@ -110,10 +153,46 @@ function Dashboard() {
                                         <p><strong>County:</strong> {auth.county}</p>
                                         <p><strong>Description:</strong> {auth.description}</p>
                                         <p><strong>Created At:</strong> {new Date(auth.createdAt).toLocaleString()}</p>
-                                        <p><strong>Requested By:</strong> {auth.userId}</p>
-                                        {userRole === 'authority' &&
-                                            <p><strong>Created By:</strong> {auth.createdBy}</p>}
+
+                                        {userRole === 'AUTHORITY' &&
+                                            <p><strong>Requested By:</strong> {auth.createdBy}</p>}
                                         <p><strong>Status:</strong> {auth.status}</p>
+                                        {auth.status.toString() !== 'PENDING' &&
+                                            <p><strong>Comments:</strong> {auth.statusComments}</p>}
+                                        {userRole === 'AUTHORITY' && (
+                                            <div className="authority-controls">
+                                                <div style={{display: 'flex', gap: '10px'}}>
+                                                    <button
+                                                        className={`status-btn approve ${statusUpdates[auth.id]?.status === 'GRANTED' ? 'selected' : ''} ${
+                                                            statusUpdates[auth.id]?.status === 'NOT_GRANTED' ? 'dimmed' : ''
+                                                        }`}
+                                                        onClick={() => handleStatusChange(auth.id, 'GRANTED')}
+                                                    >
+                                                        Approve
+                                                    </button>
+                                                    <button
+                                                        className={`status-btn deny ${statusUpdates[auth.id]?.status === 'NOT_GRANTED' ? 'selected' : ''} ${
+                                                            statusUpdates[auth.id]?.status === 'GRANTED' ? 'dimmed' : ''
+                                                        }`}
+                                                        onClick={() => handleStatusChange(auth.id, 'NOT_GRANTED')}
+                                                    >
+                                                        Deny
+                                                    </button>
+                                                </div>
+                                                <textarea
+                                                    placeholder="Enter comments..."
+                                                    value={statusUpdates[auth.id]?.comments || ''}
+                                                    onChange={(e) => handleCommentsChange(auth.id, e.target.value)}
+                                                ></textarea>
+                                                <button
+                                                    className="dashboard-btn"
+                                                    onClick={() => handleSubmit(auth.id)}
+                                                    style={{marginTop: '10px'}}
+                                                >
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        )}
                                     </li>
                                 ))}
                             </ul>

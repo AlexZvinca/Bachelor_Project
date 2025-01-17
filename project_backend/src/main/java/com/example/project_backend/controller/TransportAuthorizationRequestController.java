@@ -1,5 +1,6 @@
 package com.example.project_backend.controller;
 
+import com.example.project_backend.dto.StatusCommentsDTO;
 import com.example.project_backend.dto.TransportAuthorizationRequestCountyDTO;
 import com.example.project_backend.dto.TransportAuthorizationRequestDTO;
 import com.example.project_backend.dto.UserCreationDTO;
@@ -83,6 +84,15 @@ public class TransportAuthorizationRequestController {
                                                @RequestBody String status)
     {
         transportAuthorizationRequestService.changeTransportAuthorizationRequestStatus(id, status);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(path = "status-motivation/{id}")
+    public ResponseEntity<Void> changeTransportAuthorizationRequestStatusAndComments(@PathVariable Integer id,
+                                                                          @RequestBody StatusCommentsDTO status_comments)
+    {
+        transportAuthorizationRequestService.changeTransportAuthorizationRequestStatusAndComments(id, status_comments);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

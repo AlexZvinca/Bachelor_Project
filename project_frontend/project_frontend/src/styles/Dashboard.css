@@ -68,3 +68,79 @@
 .profile p {
     margin: 5px 0;
 }
+
+.authority-controls {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.status-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+
+.status-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.status-btn.approve {
+    background-color: #28a745;
+    color: white;
+}
+
+.status-btn.approve.dimmed {
+    background-color: #a8d5b7;
+    color: #f1f1f1;
+}
+
+.status-btn.deny {
+    background-color: #dc3545;
+    color: white;
+}
+
+.status-btn.deny.dimmed {
+    background-color: #f5b5ba;
+    color: #f1f1f1;
+}
+
+.status-btn.selected {
+    font-weight: bold;
+}
+
+.status-btn.approve:hover {
+    background-color: #218838;
+}
+
+.status-btn.deny:hover {
+    background-color: #c82333;
+}
+
+textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+    background-color: #fff;
+    resize: none;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}

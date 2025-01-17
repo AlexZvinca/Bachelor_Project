@@ -56,6 +56,9 @@ public class TransportAuthorizationRequest {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "status_comments", columnDefinition = "TEXT")
+    private String statusComments;
+
     public TransportAuthorizationRequest(int id, User user, County county, String licensePlateNumber, String vehicleIdentification, String description) {
         this.id = id;
         this.user = user;

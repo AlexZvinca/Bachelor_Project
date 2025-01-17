@@ -53,7 +53,21 @@ public class UserConfig {
                     UserRole.REQUESTOR
             );
 
-            userRepository.saveAll(List.of(user1, user2));
+            User user3 = new User(
+                    "zvincaalexandru@gmail.com",
+                    passwordEncoder.encode("admin"),
+                    "0742845779",
+                    "Alexandru",
+                    "Zvinca",
+                    LocalDate.of(2002, 5, 21),
+                    County.TM,
+                    "Timișoara",
+                    "Strada Aleea Studenților, nr. 9",
+                    "5555555555559",
+                    UserRole.AUTHORITY
+            );
+
+            userRepository.saveAll(List.of(user1, user2, user3));
 
             TransportAuthorizationRequest request1 = new TransportAuthorizationRequest(
                     user1,
@@ -71,7 +85,15 @@ public class UserConfig {
                     "Request for light goods transport in Timis County"
             );
 
-            transportAuthorizationRequestRepository.saveAll(List.of(request1, request2));
+            TransportAuthorizationRequest request3 = new TransportAuthorizationRequest(
+                    user2,
+                    County.TM,
+                    "TM-5678-DEZ",
+                    "VIN0987654320",
+                    "Request for dark goods transport in Timis County"
+            );
+
+            transportAuthorizationRequestRepository.saveAll(List.of(request1, request2, request3));
         };
     }
 }

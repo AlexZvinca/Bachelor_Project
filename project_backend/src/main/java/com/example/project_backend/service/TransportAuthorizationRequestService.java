@@ -1,5 +1,6 @@
 package com.example.project_backend.service;
 
+import com.example.project_backend.dto.StatusCommentsDTO;
 import com.example.project_backend.dto.TransportAuthorizationRequestCountyDTO;
 import com.example.project_backend.dto.TransportAuthorizationRequestDTO;
 import com.example.project_backend.dto.UserCreationDTO;
@@ -88,4 +89,30 @@ public class TransportAuthorizationRequestService {
         transportAuthorizationRequestRepository.save(transportAuthorizationRequest);
     }
 
+    public void changeTransportAuthorizationRequestStatusAndComments(Integer id, StatusCommentsDTO status_comments)
+    {
+        TransportAuthorizationRequest transportAuthorizationRequest = transportAuthorizationRequestRepository.findById(id).orElseThrow();
+
+        String status;
+        status = status_comments.status();
+
+        System.out.println(status);
+
+        //status = status.substring(1, status.length() - 1);
+        switch (status)
+        {
+            case "GRANTED":
+                transportAuthorizationRequest.setStatus(Status.GRANTED);
+                break;
+            case "NOT_GRANTED":
+                transportAuthorizationRequest.setStatus(Status.NOT_GRANTED);
+                break;
+            default:
+                throw new RuntimeException("Invalid status");
+        }
+
+        transportAuthorizationRequest.setStatusComments(status_comments.comments());
+
+        transportAuthorizationRequestRepository.save(transportAuthorizationRequest);
+    }
 }
