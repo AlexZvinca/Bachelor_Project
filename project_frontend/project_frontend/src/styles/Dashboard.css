@@ -36,22 +36,24 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.authorization-list {
+.dashboard-list {
     list-style: none;
     padding: 0;
 }
 
-.authorization-item {
+.dashboard-item {
     border-bottom: 1px solid #ddd;
     padding: 10px 0;
 }
 
-.authorization-item:last-child {
+.dashboard-item:last-child {
     border-bottom: none;
 }
 
 .dashboard-btn {
     margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
     padding: 10px 15px;
     color: #fff;
     background-color: #53b02b;
@@ -143,4 +145,21 @@ textarea:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.delete-btn {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    padding: 10px 15px;
+    color: #fff;
+    background-color: #c82333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
 }

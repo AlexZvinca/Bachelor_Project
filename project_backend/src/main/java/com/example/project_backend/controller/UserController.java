@@ -68,6 +68,20 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String id)
+    {
+        try
+        {
+            userService.deleteUser(id);
+        }catch (Exception e)
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 //    @RequestMapping(method = RequestMethod.OPTIONS, path = "/users")
 //    public ResponseEntity<Void> handleOptions() {
 //        return ResponseEntity.ok()

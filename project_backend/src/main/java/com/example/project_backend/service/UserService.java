@@ -128,7 +128,7 @@ public class UserService{
     {
         User user = userRepository.findById(id).orElseThrow();
 
-        System.out.println(role);
+        System.out.println("The role is: " + role);
         role = role.substring(1, role.length() - 1);
 
         switch (role)

@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/Dashboard.css';
 
 function Dashboard() {
-    const [activeTab, setActiveTab] = useState('Authorizations');
     const [authorizations, setAuthorizations] = useState([]);
     const [userData, setUserData] = useState(null);
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -16,8 +16,12 @@ function Dashboard() {
     const userRole = localStorage.getItem('role');
     const userCounty = localStorage.getItem('county');
 
+    const [activeTab, setActiveTab] = useState(userRole === "ADMIN" ? 'Users' : 'Authorizations');
+
     useEffect(() => {
-        if (activeTab === 'Authorizations') {
+        if (userRole === 'ADMIN' && activeTab === 'Users') {
+            fetchAllUsers();
+        } else if (userRole !== 'ADMIN' && activeTab === 'Authorizations') {
             fetchAuthorizations();
         } else if (activeTab === 'Profile') {
             fetchUserProfile();
@@ -61,6 +65,42 @@ function Dashboard() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const fetchAllUsers = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await axios.get(`http://localhost:8080/users`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+            });
+            setUsers(response.data.filter(user => user.id !== userId) || []);
+        } catch (err) {
+            setError('Failed to fetch users. Please try again later.');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleRoleChange = async (id, role) => {
+
+        axios({
+            url: `http://localhost:8080/users/${id}/role`,
+            method: "PUT",
+            data: JSON.stringify(role),
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+        })
+            .catch((err) => {
+                alert('Failed to update user role.');
+                console.error(err);
+            });
+
+        alert('Role changed successfully!');
+        fetchAllUsers();
     };
 
     const handleTabClick = (tab) => setActiveTab(tab);
@@ -116,15 +156,41 @@ function Dashboard() {
         }
     };
 
+    const handleDeleteUser = async (id) => {
+        if (window.confirm("Are you sure you want to delete this user?")) {
+            try {
+                await axios.delete(`http://localhost:8080/users/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+                alert("User deleted successfully!");
+                fetchAllUsers();
+            } catch (err) {
+                console.error('Error deleting user:', err);
+                alert('Failed to delete user. Please try again later.');
+            }
+        }
+    };
+
     return (
         <div className="dashboard-container">
             <nav className="navbar">
-                <button
-                    className={`nav-item ${activeTab === 'Authorizations' ? 'active' : ''}`}
-                    onClick={() => handleTabClick('Authorizations')}
-                >
-                    Authorizations
-                </button>
+                {userRole === 'ADMIN' ? (
+                    <button
+                        className={`nav-item ${activeTab === 'Users' ? 'active' : ''}`}
+                        onClick={() => handleTabClick('Users')}
+                    >
+                        Users
+                    </button>
+                ) : (
+                    <button
+                        className={`nav-item ${activeTab === 'Authorizations' ? 'active' : ''}`}
+                        onClick={() => handleTabClick('Authorizations')}
+                    >
+                        Authorizations
+                    </button>
+                )}
                 <button
                     className={`nav-item ${activeTab === 'Profile' ? 'active' : ''}`}
                     onClick={() => handleTabClick('Profile')}
@@ -137,7 +203,7 @@ function Dashboard() {
                 {loading && <p>Loading...</p>}
                 {error && <p className="error">{error}</p>}
 
-                {activeTab === 'Authorizations' && !loading && !error && (
+                {activeTab === 'Authorizations' && userRole !== 'ADMIN' && !loading && !error && (
                     <div className="authorizations">
                         <h2>
                             {userRole === 'AUTHORITY'
@@ -145,9 +211,9 @@ function Dashboard() {
                                 : 'Your Authorizations'}
                         </h2>
                         {authorizations.length > 0 ? (
-                            <ul className="authorization-list">
+                            <ul className="dashboard-list">
                                 {authorizations.map((auth) => (
-                                    <li key={auth.id} className="authorization-item">
+                                    <li key={auth.id} className="dashboard-item">
                                         <p><strong>Vehicle:</strong> {auth.licensePlateNumber}</p>
                                         <p><strong>Authorization ID:</strong> {auth.id}</p>
                                         <p><strong>County:</strong> {auth.county}</p>
@@ -207,6 +273,38 @@ function Dashboard() {
                                 Request a New Authorization
                             </button>
                         )}
+                    </div>
+                )}
+
+                {activeTab === 'Users' && userRole === 'ADMIN' && !loading && !error && (
+                    <div className="users">
+                        <h2>All Users</h2>
+                        <ul className="dashboard-list">
+                            {users.map((user) => (
+                                <li key={user.id} className="dashboard-item">
+                                    <p><strong>ID:</strong> {user.id}</p>
+                                    <p><strong>Name:</strong> {user.firstName} {user.lastName}</p>
+                                    <p><strong>Email:</strong> {user.email}</p>
+                                    <p><strong>Phone Number:</strong> {user.phoneNumber}</p>
+                                    <p><strong>Date of Birth:</strong> {user.dateOfBirth}</p>
+                                    <p><strong>Address:</strong> {user.address}, {user.city}, {user.county}</p>
+                                    <p><strong>CNP:</strong> {user.cnp}</p>
+                                    <p><strong>Role:</strong> {user.userRole}</p>
+                                    <button
+                                        className="dashboard-btn"
+                                        onClick={() => handleRoleChange(user.id, user.userRole === 'AUTHORITY' ? 'REQUESTOR' : 'AUTHORITY')}
+                                    >
+                                        {user.userRole === 'AUTHORITY' ? 'Remove Authority' : 'Grant Authority'}
+                                    </button>
+                                    <button
+                                        className="delete-btn"
+                                        onClick={() => handleDeleteUser(user.id)}
+                                    >
+                                        Delete User
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 )}
 

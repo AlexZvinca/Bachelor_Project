@@ -67,7 +67,21 @@ public class UserConfig {
                     UserRole.AUTHORITY
             );
 
-            userRepository.saveAll(List.of(user1, user2, user3));
+            User user4 = new User(
+                    "alexandruzvinca@yahoo.com",
+                    passwordEncoder.encode("admin"),
+                    "0742845779",
+                    "Alexandru",
+                    "Zvinca",
+                    LocalDate.of(2002, 5, 21),
+                    County.TM,
+                    "Timișoara",
+                    "Strada Aleea Studenților, nr. 9",
+                    "5555555555599",
+                    UserRole.ADMIN
+            );
+
+            userRepository.saveAll(List.of(user1, user2, user3, user4));
 
             TransportAuthorizationRequest request1 = new TransportAuthorizationRequest(
                     user1,
