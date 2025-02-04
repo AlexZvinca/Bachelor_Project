@@ -65,6 +65,7 @@ function RegisterPage() {
         cnp: ''
     });
 
+    const [idDocument, setIdDocument] = useState(null);
     const [error, setError] = useState('');
     const [confirmationMessage, setConfirmationMessage] = useState('');
     const navigate = useNavigate();
@@ -83,12 +84,16 @@ function RegisterPage() {
         }));
     };
 
+    const handleFileChange = (e) => {
+        setIdDocument(e.target.files[0]);
+    };
+
     const handleRegister = async (e) => {
         e.preventDefault();
 
         const { confirmPassword, ...payload } = formData;
 
-        const emptyField = Object.values(payload).some(value => value === '');
+        const emptyField = Object.values(payload).some((value) => value === '');
         if (emptyField) {
             setError('Please fill all fields');
             return;
@@ -109,10 +114,33 @@ function RegisterPage() {
             return;
         }
 
-        setError('');
-        setConfirmationMessage('A confirmation email has been sent to your email address.');
+        if (!idDocument) {
+            setError('Please upload a copy of your ID');
+            return;
+        }
 
-        axios.post('http://localhost:8080/users', payload)
+        setError('');
+        setConfirmationMessage('Registering...');
+
+        console.log(formData);
+        console.log(JSON.stringify(formData));
+
+        const formDataToSend = new FormData();
+        //Object.keys(formData).forEach((key) => formDataToSend.append(key, formData[key]));
+        formDataToSend.append('details', JSON.stringify(formData));
+        formDataToSend.append('idDocument', idDocument);
+        // const idDocumentName = idDocument.name;
+        // // formDataToSend.append('idDocument', {
+        // //     uri: idDocument.uri || idDocument,
+        // //     name: idDocumentName,
+        // //     type: 'image/jpg',
+        // // });
+
+        axios.post('http://localhost:8080/users', formDataToSend, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
             .then(function (response) {
                 console.log(response);
                 navigate('/login');
@@ -123,13 +151,15 @@ function RegisterPage() {
             });
     };
 
-    const counties = [
-        "Alba", "Arad", "Argeș", "Bacău", "Bihor", "Bistrița-Năsăud", "Botoșani", "Brașov", "Brăila",
-        "Buzău", "Caraș-Severin", "Călărași", "Cluj", "Constanța", "Covasna", "Dâmbovița", "Dolj",
-        "Galați", "Giurgiu", "Gorj", "Harghita", "Hunedoara", "Ialomița", "Iași", "Ilfov", "Maramureș",
-        "Mehedinți", "Mureș", "Neamț", "Olt", "Prahova", "Sălaj", "Satu Mare", "Sibiu", "Suceava",
-        "Teleorman", "Timiș", "Tulcea", "Vaslui", "Vâlcea", "Vrancea", "București", "Foreign Country"
-    ];
+    const counties = Object.keys(countyMapping);
+
+    // const counties = [
+    //     "Alba", "Arad", "Argeș", "Bacău", "Bihor", "Bistrița-Năsăud", "Botoșani", "Brașov", "Brăila",
+    //     "Buzău", "Caraș-Severin", "Călărași", "Cluj", "Constanța", "Covasna", "Dâmbovița", "Dolj",
+    //     "Galați", "Giurgiu", "Gorj", "Harghita", "Hunedoara", "Ialomița", "Iași", "Ilfov", "Maramureș",
+    //     "Mehedinți", "Mureș", "Neamț", "Olt", "Prahova", "Sălaj", "Satu Mare", "Sibiu", "Suceava",
+    //     "Teleorman", "Timiș", "Tulcea", "Vaslui", "Vâlcea", "Vrancea", "București", "Foreign Country"
+    // ];
 
     return (
         <div className="register-container">
@@ -269,9 +299,21 @@ function RegisterPage() {
                     />
                 </div>
 
-                {error && <p className="error">{error}</p>}
-                {confirmationMessage && <p className="confirmation-message">{confirmationMessage}</p>}
-                <button type="submit">Register</button>
+                <div className="inputGroup">
+                    <label>ID Document (Photo/Scan):</label>
+                    <input
+                        type="file"
+                        name="idDocument"
+                        onChange={handleFileChange}
+                        required
+                        className="input"
+                        accept="image/*"
+                    />
+                </div>
+
+                    {error && <p className="error">{error}</p>}
+                    {confirmationMessage && <p className="confirmation-message">{confirmationMessage}</p>}
+                    <button type="submit">Register</button>
             </form>
 
             <div className="links">
@@ -281,7 +323,7 @@ function RegisterPage() {
                 </p>
             </div>
         </div>
-    );
+);
 }
 
 export default RegisterPage;

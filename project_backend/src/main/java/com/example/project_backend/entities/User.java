@@ -60,6 +60,9 @@ public class User{
     @Column(nullable = false, unique = true, length = 13)
     private String cnp;
 
+    @Column(name = "id_document", unique = true)
+    private String idDocument;
+
     @Enumerated(EnumType.STRING)
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Column(nullable = false)
@@ -69,7 +72,7 @@ public class User{
     @JsonIgnore
     private List<TransportAuthorizationRequest> transportAuthorizationRequests;
 
-    public User(String id, String email, String password, String phoneNumber, String firstName, String lastName, LocalDate dateOfBirth, County county, String city, String address, String cnp, UserRole userRole) {
+    public User(String id, String email, String password, String phoneNumber, String firstName, String lastName, LocalDate dateOfBirth, County county, String city, String address, String cnp, String idDocument, UserRole userRole) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -81,6 +84,22 @@ public class User{
         this.city = city;
         this.address = address;
         this.cnp = cnp;
+        this.idDocument = idDocument;
+        this.userRole = userRole;
+    }
+
+    public User(String email, String password, String phoneNumber, String firstName, String lastName, LocalDate dateOfBirth, County county, String city, String address, String cnp, String idDocument, UserRole userRole) {
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.county = county;
+        this.city = city;
+        this.address = address;
+        this.cnp = cnp;
+        this.idDocument = idDocument;
         this.userRole = userRole;
     }
 
@@ -96,6 +115,21 @@ public class User{
         this.address = address;
         this.cnp = cnp;
         this.userRole = userRole;
+    }
+
+    public User(String email, String password, String phoneNumber, String firstName, String lastName, LocalDate dateOfBirth, County county, String city, String address, String cnp, String idDocument) {
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.county = county;
+        this.city = city;
+        this.address = address;
+        this.cnp = cnp;
+        this.idDocument = idDocument;
+        this.userRole = UserRole.REQUESTOR;
     }
 
     public User(String email, String password, String phoneNumber, String firstName, String lastName, LocalDate dateOfBirth, County county, String city, String address, String cnp) {

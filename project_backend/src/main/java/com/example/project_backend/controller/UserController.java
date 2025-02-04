@@ -2,14 +2,19 @@ package com.example.project_backend.controller;
 
 import com.example.project_backend.dto.UserCreationDTO;
 import com.example.project_backend.entities.User;
+import com.example.project_backend.service.BucketService;
 import com.example.project_backend.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 @RestController
@@ -17,10 +22,12 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final BucketService bucketService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, BucketService bucketService) {
         this.userService = userService;
+        this.bucketService = bucketService;
     }
 
     @GetMapping
@@ -42,8 +49,9 @@ public class UserController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody UserCreationDTO user)
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<User> addUser(@Valid @RequestPart("details")  UserCreationDTO user,
+                                        @RequestPart("idDocument") MultipartFile file)
     {
         if (user.email() == null || user.password() == null)
         {
@@ -51,6 +59,9 @@ public class UserController {
         }
 
         User newUser = userService.addNewUser(user);
+        String userId = newUser.getId();
+        bucketService.uploadFile(userId, file);
+
         if (newUser == null)
         {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
