@@ -1,11 +1,13 @@
 package com.example.project_backend.controller;
 
+import com.amazonaws.services.s3.model.S3Object;
 import com.example.project_backend.dto.UserCreationDTO;
 import com.example.project_backend.entities.User;
 import com.example.project_backend.service.BucketService;
 import com.example.project_backend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
 
 import java.io.File;
 import java.util.List;
@@ -46,6 +49,24 @@ public class UserController {
     public ResponseEntity<User> getUserById(@PathVariable String id) {
         User user = userService.getUserById(id);
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/id-document")
+    public ResponseEntity<byte[]> getUserIdDocument(@PathVariable String id) {
+        try {
+            byte[] fileContent = userService.getUserIdDocument(id);
+            if (fileContent == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=id_document");
+            headers.add(HttpHeaders.CONTENT_TYPE, "application/jpeg");
+
+            return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @CrossOrigin(origins = "http://localhost:5173")

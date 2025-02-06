@@ -221,7 +221,7 @@ function Dashboard() {
                                         <p><strong>Created At:</strong> {new Date(auth.createdAt).toLocaleString()}</p>
 
                                         {userRole === 'AUTHORITY' &&
-                                            <p><strong>Requested By:</strong> {auth.createdBy}</p>}
+                                            <p><strong>Requested By:</strong> {auth.userId}</p>}
                                         <p><strong>Status:</strong> {auth.status}</p>
                                         {auth.status.toString() !== 'PENDING' &&
                                             <p><strong>Comments:</strong> {auth.statusComments}</p>}
@@ -243,6 +243,12 @@ function Dashboard() {
                                                         onClick={() => handleStatusChange(auth.id, 'NOT_GRANTED')}
                                                     >
                                                         Deny
+                                                    </button>
+                                                    <button
+                                                        className="doc-btn"
+                                                        onClick={() => navigate(`/documents?userId=${auth.userId}&authId=${auth.id}`)}
+                                                    >
+                                                        View Documents
                                                     </button>
                                                 </div>
                                                 <textarea
@@ -301,6 +307,12 @@ function Dashboard() {
                                         onClick={() => handleDeleteUser(user.id)}
                                     >
                                         Delete User
+                                    </button>
+                                    <button
+                                        className="doc-btn"
+                                        onClick={() => navigate(`/documents?userId=${user.id}`)}
+                                    >
+                                        View User ID Document
                                     </button>
                                 </li>
                             ))}

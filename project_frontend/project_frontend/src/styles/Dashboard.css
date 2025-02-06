@@ -87,16 +87,6 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-
-.status-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
 .status-btn.approve {
     background-color: #28a745;
     color: white;
@@ -127,6 +117,22 @@
 
 .status-btn.deny:hover {
     background-color: #c82333;
+}
+
+.doc-btn {
+    padding: 10px 20px;
+    background-color: #2c88d3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.doc-btn:hover {
+    background-color: #2c6fd3;
+    color: #f1f1f1;
 }
 
 textarea {

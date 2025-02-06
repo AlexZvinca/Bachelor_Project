@@ -6,6 +6,7 @@ import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import DashboardPage from "../pages/DashboardPage.jsx";
 import LandingPage from "../pages/LandingPage.jsx";
 import NewAuthorizationForm from '../pages/NewAuthorizationForm';
+import DocumentPage from "../pages/DocumentPage.jsx";
 
 function RoutesComponent() {
     return (
@@ -17,6 +18,7 @@ function RoutesComponent() {
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/new-authorization" element={<NewAuthorizationForm />} />
+                <Route path="/documents" element={<DocumentPage />} />
             </Routes>
         </Router>
     );

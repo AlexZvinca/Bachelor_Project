@@ -1,5 +1,6 @@
 package com.example.project_backend.service;
 
+import com.amazonaws.services.s3.model.S3Object;
 import com.example.project_backend.dto.UserCreationDTO;
 import com.example.project_backend.dto.UserPropValuePairDTO;
 import com.example.project_backend.entities.County;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.management.relation.Role;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,13 +21,15 @@ public class UserService{
 
     private final static String USER_NOT_FOUND_MESSAGE = "User not found - email %s";
     private final UserRepository userRepository;
+    private final BucketService bucketService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, BucketService bucketService) {
         this.userRepository = userRepository;
+        this.bucketService = bucketService;
     }
 
     public List<User> getUsers(){
@@ -36,6 +40,20 @@ public class UserService{
     public User getUserById(String id)
     {
         return userRepository.findById(id).orElse(null);
+    }
+
+    public byte[] getUserIdDocument(String userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null || user.getIdDocument() == null || user.getIdDocument().isEmpty()) {
+            return null;
+        }
+
+        try {
+            S3Object s3Object = bucketService.downloadFile(user.getIdDocument());
+            return s3Object.getObjectContent().readAllBytes();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to download file from Cloud", e);
+        }
     }
 
     public User addNewUser(UserCreationDTO user)
