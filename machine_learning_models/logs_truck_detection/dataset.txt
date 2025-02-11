@@ -1,0 +1,3 @@
+https://universe.roboflow.com/aifzvinca/expanded-logging-trucks-mvqvk/dataset/1
+Forked and resplit (train-60%, valid-20%, test-20%) from
+https://universe.roboflow.com/loggingtruck/expanded-logging-trucks
