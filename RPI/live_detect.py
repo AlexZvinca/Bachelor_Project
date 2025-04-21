@@ -1,19 +1,28 @@
 from picamera2 import Picamera2
 import cv2
 import numpy as np
-import tensorflow as tf
+from tflite_runtime.interpreter import Interpreter, load_delegate
 import time
 
+    
 #Load TFLite model
-interpreter = tf.lite.Interpreter(model_path="best_float32.tflite")
+#interpreter = tf.lite.Interpreter(model_path="best_320_full_integer_quant_edgetpu.tflite")
+interpreter = Interpreter(
+    model_path="best_320_full_integer_quant_edgetpu.tflite",
+    experimental_delegates=[load_delegate('libedgetpu.so.1')]
+)
 interpreter.allocate_tensors()
 
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 input_size = input_details[0]['shape'][1]
+input_dtype = input_details[0]['dtype']
+
+print("Input dtype:", input_dtype)
+print("Input shape:", input_details[0]['shape'])
 
 # --- Postprocessing ---
-def postprocess(output, conf_threshold=0.5, iou_threshold=0.5):
+def postprocess(output, input_size, conf_threshold=0.5, iou_threshold=0.5):
     output = output[0]
     boxes = output[:4, :].T
     scores = output[4, :]
@@ -33,7 +42,8 @@ def postprocess(output, conf_threshold=0.5, iou_threshold=0.5):
     boxes_xyxy *= input_size
 
     indices = np.array(cv2.dnn.NMSBoxes(
-        boxes_xyxy.tolist(), scores.tolist(),
+        boxes_xyxy.tolist(),
+        scores.tolist(),
         score_threshold=conf_threshold,
         nms_threshold=iou_threshold
     )).flatten()
@@ -59,13 +69,33 @@ start_time = time.time()
 
 while True:
     frame = picam2.capture_array()
-    input_data = np.expand_dims(frame.astype(np.float32) / 255.0, axis=0)
+    
+    
+    #input_data = np.expand_dims(frame.astype(np.float32) / 255.0, axis=0)
+    if input_dtype == np.uint8:
+        input_data = np.expand_dims(frame.astype(np.uint8), axis=0)
+    elif input_dtype == np.int8:
+        input_data = np.expand_dims(frame.astype(np.int8), axis=0)
+        #scale, zero_point = input_details[0]['quantization']
+        #frame_scaled = frame.astype(np.float32) / 255.0
+        #input_data = (frame_scaled / scale + zero_point).astype(np.int8)
+        #input_data = np.expand_dims(input_data, axis=0)
+    else:
+        raise ValueError("Unsupported input type!")
 
     interpreter.set_tensor(input_details[0]['index'], input_data)
+    start = time.time()
     interpreter.invoke()
+    end = time.time()
+    print(f"Inference time: {(end - start) * 1000:.2f} ms")
+    
     output = interpreter.get_tensor(output_details[0]['index'])
-
-    detections = postprocess(output)
+    
+    if output_details[0]['dtype'] == np.int8:
+        scale, zero_point = output_details[0]['quantization']
+        output = (output.astype(np.float32) - zero_point) * scale
+    
+    detections = postprocess(output, input_size)
 
     # Draw boxes
     for det in detections:
@@ -81,7 +111,7 @@ while True:
     cv2.putText(frame, f"FPS: {fps:.2f}", (10, 30),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
 
-    cv2.imshow("YOLOv11s Live Detection", frame)
+    cv2.imshow("YOLOv11s Live Detection (With Coral Edge TPU)", frame)
             
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
