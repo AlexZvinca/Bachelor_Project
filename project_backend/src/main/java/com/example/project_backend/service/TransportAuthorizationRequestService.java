@@ -115,4 +115,9 @@ public class TransportAuthorizationRequestService {
 
         transportAuthorizationRequestRepository.save(transportAuthorizationRequest);
     }
+
+    public boolean isPlateAuthorized(String licensePlateNumber) {
+        List<TransportAuthorizationRequest> requests = transportAuthorizationRequestRepository.findByLicensePlateNumber(licensePlateNumber);
+        return requests.stream().anyMatch(r -> r.getStatus() == Status.GRANTED);
+    }
 }

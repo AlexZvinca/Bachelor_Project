@@ -96,4 +96,20 @@ public class TransportAuthorizationRequestController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+//    @GetMapping("/check")
+//    public ResponseEntity<Boolean> checkIfPlateAuthorized(@RequestParam String plate) {
+//        boolean isAuthorized = transportAuthorizationRequestService.isPlateAuthorized(plate);
+//        return ResponseEntity.ok(isAuthorized);
+//    }
+
+    @GetMapping("/check")
+    public ResponseEntity<String> checkAuthorization(@RequestParam String plate) {
+        boolean authorized = transportAuthorizationRequestService.isPlateAuthorized(plate);
+        String body = "{\"authorized\": " + authorized + "}";
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/json")
+                .header("Content-Length", String.valueOf(body.length()))
+                .body(body);
+    }
 }
