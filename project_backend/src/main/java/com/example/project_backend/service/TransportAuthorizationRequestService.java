@@ -36,7 +36,6 @@ public class TransportAuthorizationRequestService {
                 userOptional.get(),
                 County.valueOf(transportAuthorizationRequest.county()),
                 transportAuthorizationRequest.licensePlateNumber(),
-                transportAuthorizationRequest.vehicleIdentification(),
                 transportAuthorizationRequest.description()
         );
         try
@@ -60,7 +59,6 @@ public class TransportAuthorizationRequestService {
                         transportAuthorizationRequest.getId(),
                         transportAuthorizationRequest.getCounty(),
                         transportAuthorizationRequest.getLicensePlateNumber(),
-                        transportAuthorizationRequest.getVehicleIdentification(),
                         transportAuthorizationRequest.getDescription(),
                         transportAuthorizationRequest.getStatus(),
                         transportAuthorizationRequest.getCreatedAt(),

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Table(name = "transport_authorization_request")
 public class TransportAuthorizationRequest {
     @Id
-    @Column(length = 50, nullable = false)
+    @Column(nullable = false)
     @SequenceGenerator(
             name = "requests_sequence",
             sequenceName = "requests_sequence",
@@ -43,10 +43,7 @@ public class TransportAuthorizationRequest {
     @Column(name = "license_plate_number", length = 15, nullable = false)
     private String licensePlateNumber;
 
-    @Column(name = "vehicle_identification", columnDefinition = "TEXT", nullable = false)
-    private String vehicleIdentification;
-
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -56,28 +53,22 @@ public class TransportAuthorizationRequest {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+
     @Column(name = "status_comments", columnDefinition = "TEXT")
     private String statusComments;
 
-    public TransportAuthorizationRequest(int id, User user, County county, String licensePlateNumber, String vehicleIdentification, String description) {
-        this.id = id;
+    @Column(name = "valid_from")
+    private LocalDateTime validFrom;
+
+    @Column(name = "valid_until")
+    private LocalDateTime validUntil;
+
+    public TransportAuthorizationRequest(User user, County county, String licensePlateNumber, String description) {
         this.user = user;
         this.county = county;
         this.licensePlateNumber = licensePlateNumber;
-        this.vehicleIdentification = vehicleIdentification;
         this.description = description;
-
-        this.status =  Status.PENDING;
-        this.createdAt = LocalDateTime.now();
-    }
-
-    public TransportAuthorizationRequest(User user, County county, String licensePlateNumber, String vehicleIdentification, String description) {
-        this.user = user;
-        this.county = county;
-        this.licensePlateNumber = licensePlateNumber;
-        this.vehicleIdentification = vehicleIdentification;
-        this.description = description;
-        this.status =  Status.PENDING;
+        this.status = Status.PENDING;
         this.createdAt = LocalDateTime.now();
     }
 }

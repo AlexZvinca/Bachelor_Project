@@ -9,6 +9,5 @@ public record TransportAuthorizationRequestDTO(
           String userId,
           String county,
           String licensePlateNumber,
-          String vehicleIdentification,
           String description ){
 }

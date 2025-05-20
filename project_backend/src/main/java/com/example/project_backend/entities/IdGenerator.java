@@ -13,13 +13,13 @@ public class IdGenerator implements IdentifierGenerator {
         User user = (User) obj;
         County countyCode = user.getCounty();
 
-        // Query for the current count of users with the same county code
+        //Query for the current count of users with the same county code
         String queryStr = "SELECT COUNT(u) FROM User u WHERE u.county = :countyId";
         Query query = session.createQuery(queryStr);
         query.setParameter("countyId", countyCode);
         Long count = (Long) query.getSingleResult();
 
-        // Format the ID with the county code and incrementing number
+        //County code and incrementing number
         return countyCode + String.format("%03d", count + 1);
     }
 }

@@ -2,7 +2,6 @@ package com.example.project_backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,11 +18,10 @@ import java.util.List;
 @Table(name="user_info")
 @AllArgsConstructor
 @NoArgsConstructor
-//@JsonIgnoreProperties(ignoreUnknown = true)
 public class User{
     @Id
-    @GeneratedValue(generator = "county_based_id")
     @GenericGenerator(name = "county_based_id", strategy = "com.example.project_backend.entities.IdGenerator")
+    @GeneratedValue(generator = "county_based_id")
     @Column(updatable = false)
     private String id;
 
@@ -33,7 +31,8 @@ public class User{
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "phone_number", nullable = false)
+    //E.164 limits the number of digits of a phone number to 15 (there can be a symbol prefix)
+    @Column(name = "phone_number", nullable = false, length = 16)
     private String phoneNumber;
 
     @Column(name = "first_name", nullable = false)
@@ -57,10 +56,11 @@ public class User{
     @Column(nullable = false)
     private String address;
 
+    //Maximum number of digits for Romanian CNP is 13
     @Column(nullable = false, unique = true, length = 13)
     private String cnp;
 
-    @Column(name = "id_document", unique = true)
+    @Column(nullable = false, name = "id_document", unique = true)
     private String idDocument;
 
     @Enumerated(EnumType.STRING)
@@ -151,7 +151,6 @@ public class User{
         return "User{" +
                 "id='" + id + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

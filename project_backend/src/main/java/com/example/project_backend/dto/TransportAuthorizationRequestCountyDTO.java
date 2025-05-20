@@ -9,7 +9,6 @@ public record TransportAuthorizationRequestCountyDTO (
         Integer id,
         County county,
         String licensePlateNumber,
-        String vehicleIdentification,
         String description,
         Status status,
         LocalDateTime createdAt,
