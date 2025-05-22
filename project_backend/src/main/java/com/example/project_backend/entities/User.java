@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,8 +19,8 @@ import java.util.List;
 @NoArgsConstructor
 public class User{
     @Id
-    @GenericGenerator(name = "county_based_id", strategy = "com.example.project_backend.entities.IdGenerator")
     @GeneratedValue(generator = "county_based_id")
+    @GenericGenerator(name = "county_based_id", strategy = "com.example.project_backend.entities.IdGenerator")
     @Column(updatable = false)
     private String id;
 
@@ -60,7 +59,7 @@ public class User{
     @Column(nullable = false, unique = true, length = 13)
     private String cnp;
 
-    @Column(nullable = false, name = "id_document", unique = true)
+    @Column(name = "id_document", unique = true)
     private String idDocument;
 
     @Enumerated(EnumType.STRING)

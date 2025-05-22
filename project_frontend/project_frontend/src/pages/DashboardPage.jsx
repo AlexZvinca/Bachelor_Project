@@ -219,6 +219,8 @@ function Dashboard() {
                                         <p><strong>County:</strong> {auth.county}</p>
                                         <p><strong>Description:</strong> {auth.description}</p>
                                         <p><strong>Created At:</strong> {new Date(auth.createdAt).toLocaleString()}</p>
+                                        <p><strong>From:</strong> {new Date(auth.fromDate).toLocaleDateString()}</p>
+                                        <p><strong>Until:</strong> {new Date(auth.untilDate).toLocaleDateString()}</p>
 
                                         {userRole === 'AUTHORITY' &&
                                             <p><strong>Requested By:</strong> {auth.userId}</p>}
@@ -248,7 +250,7 @@ function Dashboard() {
                                                         className="doc-btn"
                                                         onClick={() => navigate(`/documents?userId=${auth.userId}&authId=${auth.id}`)}
                                                     >
-                                                        View Documents
+                                                        View ID Document
                                                     </button>
                                                 </div>
                                                 <textarea

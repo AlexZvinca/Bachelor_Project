@@ -36,8 +36,11 @@ public class TransportAuthorizationRequestService {
                 userOptional.get(),
                 County.valueOf(transportAuthorizationRequest.county()),
                 transportAuthorizationRequest.licensePlateNumber(),
-                transportAuthorizationRequest.description()
+                transportAuthorizationRequest.description(),
+                transportAuthorizationRequest.fromDate(),
+                transportAuthorizationRequest.untilDate()
         );
+        System.out.println(newTransportAuthorizationRequest);
         try
         {
             return transportAuthorizationRequestRepository.save(newTransportAuthorizationRequest);
@@ -62,6 +65,8 @@ public class TransportAuthorizationRequestService {
                         transportAuthorizationRequest.getDescription(),
                         transportAuthorizationRequest.getStatus(),
                         transportAuthorizationRequest.getCreatedAt(),
+                        transportAuthorizationRequest.getFromDate(),
+                        transportAuthorizationRequest.getUntilDate(),
                         transportAuthorizationRequest.getUser().getId())
                 ).toList();
     }

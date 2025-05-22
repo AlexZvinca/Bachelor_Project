@@ -53,8 +53,9 @@ function NewAuthorizationForm() {
     const [formData, setFormData] = useState({
         county: '',
         licensePlateNumber: '',
-        vehicleIdentification: '',
-        description: ''
+        description: '',
+        fromDate: '',
+        untilDate: ''
     });
 
     const [error, setError] = useState('');
@@ -88,8 +89,9 @@ function NewAuthorizationForm() {
                 userId,
                 county: formData.county,
                 licensePlateNumber: formData.licensePlateNumber,
-                vehicleIdentification: formData.vehicleIdentification,
                 description: formData.description,
+                fromDate: formData.fromDate,
+                untilDate: formData.untilDate
             }, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             });
@@ -138,11 +140,11 @@ function NewAuthorizationForm() {
                 </div>
 
                 <div className="inputGroup">
-                    <label>Vehicle Identification:</label>
+                    <label>From:</label>
                     <input
-                        type="text"
-                        name="vehicleIdentification"
-                        value={formData.vehicleIdentification}
+                        type="date"
+                        name="fromDate"
+                        value={formData.fromDate}
                         onChange={handleChange}
                         required
                         className="input"
@@ -150,7 +152,20 @@ function NewAuthorizationForm() {
                 </div>
 
                 <div className="inputGroup">
-                    <label>Description (make sure to include essential details, like scope, period, quantity, location of forest etc.):</label>
+                    <label>Until:</label>
+                    <input
+                        type="date"
+                        name="untilDate"
+                        value={formData.untilDate}
+                        onChange={handleChange}
+                        required
+                        className="input"
+                    />
+                </div>
+
+                <div className="inputGroup">
+                    <label>Description (make sure to include essential details, like scope, period, quantity, location
+                        of forest etc.):</label>
                     <textarea
                         name="description"
                         value={formData.description}

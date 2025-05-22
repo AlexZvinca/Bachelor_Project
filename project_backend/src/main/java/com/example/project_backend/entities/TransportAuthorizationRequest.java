@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -53,22 +54,23 @@ public class TransportAuthorizationRequest {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-
     @Column(name = "status_comments", columnDefinition = "TEXT")
     private String statusComments;
 
-    @Column(name = "valid_from")
-    private LocalDateTime validFrom;
+    @Column(name = "from_date", nullable = false)
+    private LocalDate fromDate;
 
-    @Column(name = "valid_until")
-    private LocalDateTime validUntil;
+    @Column(name = "until_date", nullable = false)
+    private LocalDate untilDate;
 
-    public TransportAuthorizationRequest(User user, County county, String licensePlateNumber, String description) {
+    public TransportAuthorizationRequest(User user, County county, String licensePlateNumber, String description, LocalDate fromDate, LocalDate untilDate) {
         this.user = user;
         this.county = county;
         this.licensePlateNumber = licensePlateNumber;
         this.description = description;
         this.status = Status.PENDING;
         this.createdAt = LocalDateTime.now();
+        this.fromDate = fromDate;
+        this.untilDate = untilDate;
     }
 }
