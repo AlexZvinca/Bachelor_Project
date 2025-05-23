@@ -71,6 +71,7 @@ public class TransportAuthorizationRequestService {
                         transportAuthorizationRequest.getDescription(),
                         transportAuthorizationRequest.getVolume(),
                         transportAuthorizationRequest.getStatus(),
+                        transportAuthorizationRequest.getStatusComments(),
                         transportAuthorizationRequest.getCreatedAt(),
                         transportAuthorizationRequest.getFromDate(),
                         transportAuthorizationRequest.getUntilDate(),

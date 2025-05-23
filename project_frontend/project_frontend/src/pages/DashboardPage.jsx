@@ -149,6 +149,14 @@ function Dashboard() {
 
             alert('Status updated successfully!');
 
+            setStatusUpdates(prev => ({
+                ...prev,
+                [id]: {
+                    ...prev[id],
+                    comments: ''
+                }
+            }));
+
             fetchAuthorizations();
         } catch (err) {
             console.error('Error updating status:', err);
@@ -329,7 +337,7 @@ function Dashboard() {
                         <p><strong>Name:</strong> {userData.firstName} {userData.lastName}</p>
                         <p><strong>Email:</strong> {userData.email}</p>
                         <p><strong>Phone Number:</strong> {userData.phoneNumber}</p>
-                        <p><strong>Date of Birth:</strong> {userData.dateOfBirth}</p>
+                        <p><strong>Date of Birth:</strong> {new Date(userData.dateOfBirth).toLocaleDateString()}</p>
                         <p><strong>Address:</strong> {userData.address}, {userData.city}, {userData.county}</p>
                         <p><strong>CNP:</strong> {userData.cnp}</p>
                         <p><strong>User Role:</strong> {userData.userRole}</p>

@@ -180,7 +180,7 @@ function NewAuthorizationForm() {
                 </div>
 
                 <div className="inputGroup">
-                    <label>Description (make sure to include essential details, like scope, period, quantity, location
+                    <label>Description (make sure to include essential details, like scope, location
                         of forest etc.):</label>
                     <textarea
                         name="description"

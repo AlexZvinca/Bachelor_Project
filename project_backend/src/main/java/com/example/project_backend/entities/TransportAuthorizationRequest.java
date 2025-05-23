@@ -73,6 +73,7 @@ public class TransportAuthorizationRequest {
         this.description = description;
         this.volume = volume;
         this.status = Status.PENDING;
+        this.statusComments = statusComments;
         this.createdAt = LocalDateTime.now();
         this.fromDate = fromDate;
         this.untilDate = untilDate;

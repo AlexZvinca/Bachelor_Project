@@ -126,15 +126,8 @@ function RegisterPage() {
         console.log(JSON.stringify(formData));
 
         const formDataToSend = new FormData();
-        //Object.keys(formData).forEach((key) => formDataToSend.append(key, formData[key]));
         formDataToSend.append('details', JSON.stringify(formData));
         formDataToSend.append('idDocument', idDocument);
-        // const idDocumentName = idDocument.name;
-        // // formDataToSend.append('idDocument', {
-        // //     uri: idDocument.uri || idDocument,
-        // //     name: idDocumentName,
-        // //     type: 'image/jpg',
-        // // });
 
         axios.post('http://localhost:8080/users', formDataToSend, {
             headers: {

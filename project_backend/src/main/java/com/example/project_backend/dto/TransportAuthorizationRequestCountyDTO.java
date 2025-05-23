@@ -13,6 +13,7 @@ public record TransportAuthorizationRequestCountyDTO (
         String description,
         Double volume,
         Status status,
+        String statusComments,
         LocalDateTime createdAt,
         LocalDate fromDate,
         LocalDate untilDate,
