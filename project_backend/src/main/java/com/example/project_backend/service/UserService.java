@@ -84,7 +84,7 @@ public class UserService{
                     user.setEmail(userPropValuePairDTO.value());
                     break;
                 case "password":
-                    user.setPassword(userPropValuePairDTO.value());
+                    user.setPassword(passwordEncoder.encode(userPropValuePairDTO.value()));
                     break;
                 case "phoneNumber":
                     user.setPhoneNumber(userPropValuePairDTO.value());
