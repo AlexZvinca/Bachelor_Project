@@ -8,8 +8,13 @@ import com.example.project_backend.entities.*;
 import com.example.project_backend.repository.TransportAuthorizationRequestRepository;
 import com.example.project_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.cglib.core.Local;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,5 +129,19 @@ public class TransportAuthorizationRequestService {
     public boolean isPlateAuthorized(String licensePlateNumber) {
         List<TransportAuthorizationRequest> requests = transportAuthorizationRequestRepository.findByLicensePlateNumber(licensePlateNumber);
         return requests.stream().anyMatch(r -> r.getStatus() == Status.GRANTED);
+    }
+
+
+    @Scheduled(cron = "0 0 0 * * *")//Every night at midnight
+    @EventListener(ApplicationReadyEvent.class)
+    public void expireOutdatedAuthorizations(){
+        LocalDate today = LocalDate.now();
+        List<TransportAuthorizationRequest> outdated = transportAuthorizationRequestRepository.findByStatusAndUntilDateBefore(Status.GRANTED, today);
+
+        for (TransportAuthorizationRequest auth : outdated) {
+            auth.setStatus(Status.EXPIRED);
+        }
+
+        transportAuthorizationRequestRepository.saveAll(outdated);
     }
 }
