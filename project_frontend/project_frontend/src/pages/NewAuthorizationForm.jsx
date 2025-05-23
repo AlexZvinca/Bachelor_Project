@@ -54,6 +54,7 @@ function NewAuthorizationForm() {
         county: '',
         licensePlateNumber: '',
         description: '',
+        volume: '',
         fromDate: '',
         untilDate: ''
     });
@@ -91,6 +92,7 @@ function NewAuthorizationForm() {
                 licensePlateNumber: formData.licensePlateNumber,
                 description: formData.description,
                 fromDate: formData.fromDate,
+                volume: formData.volume,
                 untilDate: formData.untilDate
             }, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -160,6 +162,20 @@ function NewAuthorizationForm() {
                         onChange={handleChange}
                         required
                         className="input"
+                    />
+                </div>
+
+                <div className="inputGroup">
+                    <label>Volume in m<sup>3</sup>:</label>
+                    <input
+                        type="number"
+                        name="volume"
+                        value={formData.volume}
+                        onChange={handleChange}
+                        required
+                        className="input"
+                        min="0"
+                        step="0.01"
                     />
                 </div>
 

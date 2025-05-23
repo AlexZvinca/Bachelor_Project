@@ -47,6 +47,9 @@ public class TransportAuthorizationRequest {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
+    @Column(nullable = false)
+    private double volume;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
@@ -63,11 +66,12 @@ public class TransportAuthorizationRequest {
     @Column(name = "until_date", nullable = false)
     private LocalDate untilDate;
 
-    public TransportAuthorizationRequest(User user, County county, String licensePlateNumber, String description, LocalDate fromDate, LocalDate untilDate) {
+    public TransportAuthorizationRequest(User user, County county, String licensePlateNumber, String description, double volume, LocalDate fromDate, LocalDate untilDate) {
         this.user = user;
         this.county = county;
         this.licensePlateNumber = licensePlateNumber;
         this.description = description;
+        this.volume = volume;
         this.status = Status.PENDING;
         this.createdAt = LocalDateTime.now();
         this.fromDate = fromDate;

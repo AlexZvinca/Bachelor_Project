@@ -217,6 +217,7 @@ function Dashboard() {
                                         <p><strong>Vehicle:</strong> {auth.licensePlateNumber}</p>
                                         <p><strong>Authorization ID:</strong> {auth.id}</p>
                                         <p><strong>County:</strong> {auth.county}</p>
+                                        <p><strong>Volume:</strong> {auth.volume} m<sup>3</sup></p>
                                         <p><strong>Description:</strong> {auth.description}</p>
                                         <p><strong>Created At:</strong> {new Date(auth.createdAt).toLocaleString()}</p>
                                         <p><strong>From:</strong> {new Date(auth.fromDate).toLocaleDateString()}</p>

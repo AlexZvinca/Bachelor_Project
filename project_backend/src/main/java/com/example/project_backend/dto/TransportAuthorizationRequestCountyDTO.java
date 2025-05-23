@@ -11,6 +11,7 @@ public record TransportAuthorizationRequestCountyDTO (
         County county,
         String licensePlateNumber,
         String description,
+        Double volume,
         Status status,
         LocalDateTime createdAt,
         LocalDate fromDate,

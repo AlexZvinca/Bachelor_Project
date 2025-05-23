@@ -37,6 +37,7 @@ public class TransportAuthorizationRequestService {
                 County.valueOf(transportAuthorizationRequest.county()),
                 transportAuthorizationRequest.licensePlateNumber(),
                 transportAuthorizationRequest.description(),
+                transportAuthorizationRequest.volume(),
                 transportAuthorizationRequest.fromDate(),
                 transportAuthorizationRequest.untilDate()
         );
@@ -63,6 +64,7 @@ public class TransportAuthorizationRequestService {
                         transportAuthorizationRequest.getCounty(),
                         transportAuthorizationRequest.getLicensePlateNumber(),
                         transportAuthorizationRequest.getDescription(),
+                        transportAuthorizationRequest.getVolume(),
                         transportAuthorizationRequest.getStatus(),
                         transportAuthorizationRequest.getCreatedAt(),
                         transportAuthorizationRequest.getFromDate(),

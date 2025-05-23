@@ -11,6 +11,7 @@ public record TransportAuthorizationRequestDTO(
           String county,
           String licensePlateNumber,
           String description,
+          Double volume,
           LocalDate fromDate,
           LocalDate untilDate){
 }
