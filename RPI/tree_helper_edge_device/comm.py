@@ -63,7 +63,7 @@ class SIM7600:
     def check_plate_authorization(self, plate_number):
         print(f"\nChecking plate: {plate_number}")
         encoded_plate = plate_number.replace(" ", "%20")
-        url = f"https://aef7-81-181-70-236.ngrok-free.app/authorizationRequest/check?plate={encoded_plate}"
+        url = f"https://url/authorizationRequest/check?plate={encoded_plate}"
 
         self.send_at("AT", "OK", 1)
         ok, _ = self.send_at('AT+CPIN?', 'SIM PIN', 1)
@@ -105,7 +105,7 @@ class SIM7600:
         self.send_at("AT+CGPS=1,1", "OK", 1)
         time.sleep(5)
 
-        print(f"📡 Waiting for GPS fix (up to {timeout} seconds)...")
+        print(f"Waiting for GPS fix (up to {timeout} seconds)...")
         start_time = time.time()
 
         while time.time() - start_time < timeout:
@@ -137,7 +137,7 @@ class SIM7600:
                             print(f"GPS fix: Lat {lat}, Lon {lon}")
                             return lat, lon
                         except Exception as e:
-                            print(f"⚠ Parsing error: {e}")
+                            print(f"Parsing error: {e}")
 
             print("Still waiting for GPS fix...")
             time.sleep(3)
