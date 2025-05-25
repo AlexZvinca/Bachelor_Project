@@ -2,6 +2,8 @@ import cv2
 import time
 import numpy as np
 from PIL import Image
+from plate_processor import PlateProcessor
+
 
 def draw_detections(frame, detections):
     for det in detections:
@@ -13,6 +15,7 @@ def draw_detections(frame, detections):
     return frame
 
 def run_on_image(image_path, detector, output_path="output_image_annotated.jpg"):
+    # Load and preprocess image using PIL to ensure RGB
     image = Image.open(image_path).convert("RGB")
     input_size = detector.input_details[0]['shape'][1]
     resized = image.resize((input_size, input_size))
@@ -30,6 +33,7 @@ def run_on_image(image_path, detector, output_path="output_image_annotated.jpg")
     else:
         raise ValueError("Unsupported input dtype!")
 
+    # Inference
     detector.interpreter.set_tensor(detector.input_details[0]['index'], input_data)
     detector.interpreter.invoke()
 
@@ -40,6 +44,7 @@ def run_on_image(image_path, detector, output_path="output_image_annotated.jpg")
 
     detections = detector.postprocess(output)
 
+    # Draw on original-sized image (not the resized one)
     image_draw = np.array(image)
     scale_x = image_draw.shape[1] / input_size
     scale_y = image_draw.shape[0] / input_size
@@ -55,10 +60,16 @@ def run_on_image(image_path, detector, output_path="output_image_annotated.jpg")
         cv2.putText(image_draw, f"{conf:.2f}", (x1, y1 - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
 
+    # Save result
     cv2.imwrite(output_path, cv2.cvtColor(image_draw, cv2.COLOR_RGB2BGR))
     print(f"Saved annotated image to {output_path}")
+    if detections:
+        processor = PlateProcessor(min_confirmations=1)
+        processor.process_frame(image_draw)  
+    processor.shutdown()
 
 def run_on_video(video_path, detector, output_path="output_annotated.mp4"):
+    processor = PlateProcessor()
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
         print(f"Failed to open video: {video_path}")
@@ -109,6 +120,9 @@ def run_on_video(video_path, detector, output_path="output_annotated.mp4"):
 
         scale_x = width / input_size
         scale_y = height / input_size
+        
+        if detections and processor.should_process():
+            processor.process_frame(frame)
 
         for det in detections:
             x1, y1, x2, y2, conf = det
@@ -128,8 +142,10 @@ def run_on_video(video_path, detector, output_path="output_annotated.mp4"):
     elapsed = time.time() - start_time
     print(f"Finished. {frame_count} frames in {elapsed:.2f}s "
           f"({frame_count / elapsed:.2f} FPS)")
+    processor.shutdown()
 
 def run_live_feed(detector, camera):
+    processor = PlateProcessor()
     print("Starting live feed...")
     frame_count = 0
     start_time = time.time()
@@ -138,6 +154,10 @@ def run_live_feed(detector, camera):
         while True:
             frame = camera.get_frame()
             detections = detector.detect(frame)
+            
+            if detections and processor.should_process():
+                processor.process_frame(frame)
+                
             output = draw_detections(frame, detections)
 
             frame_count += 1
@@ -147,7 +167,8 @@ def run_live_feed(detector, camera):
 
             cv2.imshow("Detection - Live", output)
             if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+                processor.shutdown()
+                break 
 
     finally:
         cv2.destroyAllWindows()

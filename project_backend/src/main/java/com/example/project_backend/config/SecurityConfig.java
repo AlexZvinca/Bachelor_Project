@@ -54,7 +54,8 @@ public class SecurityConfig {
                                 "/error",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/swagger-ui.html").permitAll())
+                                "/swagger-ui.html",
+                                "/authorizationRequest/check").permitAll())
                 .authorizeHttpRequests((authorizeRequests) -> authorizeRequests
                         .requestMatchers(HttpMethod.POST,
                                 "/users",

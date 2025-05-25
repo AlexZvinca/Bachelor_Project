@@ -10,6 +10,7 @@ class SIM7600:
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         GPIO.setup(self.power_key, GPIO.OUT)
+        self.gps_coords = None
 
     def power_on(self):
         print("\nPowering on SIM7600...")
@@ -27,6 +28,45 @@ class SIM7600:
         GPIO.output(self.power_key, GPIO.LOW)
         time.sleep(18)
         print("SIM7600 is off")
+        
+    def initialize_sim(self):
+        print("\n[SIM7600] Initializing SIM card...")
+        self.send_at("AT", "OK", 1)
+
+        ok, _ = self.send_at('AT+CPIN?', 'SIM PIN', 1)
+        if ok:
+            self.send_at(f'AT+CPIN="{self.pin_code}"', 'OK', 2)
+            time.sleep(5)
+
+        self.send_at('AT+CPIN?', 'READY', 2)
+        print("SIM ready.")
+        
+    def initialize_http(self):
+        print("\n[SIM7600] Initializing HTTP...")
+        self.send_at("AT+CGATT=1", "OK", 2)
+        self.send_at('AT+CGDCONT=1,"IP","net"', "OK", 2)
+        print("HTTP and network ready.")
+    
+    def initialize_sms(self):
+        print("\n[SIM7600] Initializing SMS settings...")
+        self.send_at("AT", "OK", 1)
+        self.send_at("AT+CMGF=1", "OK", 1)
+        self.send_at('AT+CSCS="GSM"', "OK", 1)
+        self.send_at('AT+CSCA="+40744946000"', "OK", 1)
+        print("SMS ready.")
+        
+    def initialize(self):
+        self.power_on()
+        self.initialize_sim()
+        self.initialize_http()
+        self.initialize_sms()
+
+        print("Getting GPS coordinates...")
+        self.gps_coords = self.get_gps_coordinates()
+        if self.gps_coords and all(self.gps_coords):
+            print(f"GPS fixed: {self.gps_coords}")
+        else:
+            print("GPS not fixed.")
 
     def send_at(self, command, expected, timeout=2):
         print(f"\n'{command}' →")
@@ -40,10 +80,6 @@ class SIM7600:
 
     def send_sms(self, phone_number, message):
         print("\nSending SMS alert...")
-        self.send_at("AT", "OK", 1)
-        self.send_at("AT+CMGF=1", "OK", 1)
-        self.send_at('AT+CSCS="GSM"', "OK", 1)
-        self.send_at('AT+CSCA="+40744946000"', "OK", 1)
 
         self.ser.write(f'AT+CMGS="{phone_number}"\r'.encode())
         time.sleep(2)
@@ -65,15 +101,6 @@ class SIM7600:
         encoded_plate = plate_number.replace(" ", "%20")
         url = f"https://url/authorizationRequest/check?plate={encoded_plate}"
 
-        self.send_at("AT", "OK", 1)
-        ok, _ = self.send_at('AT+CPIN?', 'SIM PIN', 1)
-        if ok:
-            self.send_at(f'AT+CPIN="{self.pin_code}"', 'OK', 2)
-            time.sleep(5)
-
-        self.send_at('AT+CPIN?', 'READY', 2)
-        self.send_at("AT+CGATT=1", "OK", 2)
-        self.send_at('AT+CGDCONT=1,"IP","net"', "OK", 2)
         self.send_at("AT+HTTPINIT", "OK", 2)
         self.send_at('AT+HTTPPARA="CID",1', "OK", 2)
         self.send_at(f'AT+HTTPPARA="URL","{url}"', "OK", 2)
@@ -88,9 +115,9 @@ class SIM7600:
             if self.ser.inWaiting():
                 body = self.ser.read(self.ser.inWaiting()).decode(errors='ignore').lower()
                 print("HTTP Body:\n", body)
-                if '"authorized":false' in body:
+                if '"authorized": false' in body:
                     authorized = False
-                elif '"authorized":true' in body:
+                elif '"authorized": true' in body:
                     authorized = True
                 else:
                     print("Unexpected JSON format.")
