@@ -1,5 +1,6 @@
 package com.example.project_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,7 +52,8 @@ public class TransportAuthorizationRequest {
     private double volume;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @Column(nullable = false, length = 12)
     private Status status;
 
     @Column(name = "created_at", nullable = false)
@@ -73,7 +75,6 @@ public class TransportAuthorizationRequest {
         this.description = description;
         this.volume = volume;
         this.status = Status.PENDING;
-        this.statusComments = statusComments;
         this.createdAt = LocalDateTime.now();
         this.fromDate = fromDate;
         this.untilDate = untilDate;

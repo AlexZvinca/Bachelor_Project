@@ -55,8 +55,7 @@ public class User{
     @Column(nullable = false)
     private String address;
 
-    //Maximum number of digits for Romanian CNP is 13
-    @Column(nullable = false, unique = true, length = 13)
+    @Column(nullable = false, unique = true, length = 15)
     private String cnp;
 
     @Column(name = "id_document", unique = true)
@@ -64,7 +63,7 @@ public class User{
 
     @Enumerated(EnumType.STRING)
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @Column(nullable = false)
+    @Column(name = "user_role", nullable = false, length = 10)
     private UserRole userRole;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

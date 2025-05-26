@@ -109,10 +109,10 @@ function RegisterPage() {
             return;
         }
 
-        if (!/^\d{13}$/.test(formData.cnp)) {
-            setError('CNP must contain exactly 13 digits');
-            return;
-        }
+        // if (!/^\d{13}$/.test(formData.cnp)) {
+        //     setError('CNP must contain exactly 13 digits');
+        //     return;
+        // }
 
         if (!idDocument) {
             setError('Please upload a copy of your ID');
@@ -281,7 +281,7 @@ function RegisterPage() {
                 </div>
 
                 <div className="inputGroup">
-                    <label>CNP:</label>
+                    <label>National Identification Number:</label>
                     <input
                         type="text"
                         name="cnp"
