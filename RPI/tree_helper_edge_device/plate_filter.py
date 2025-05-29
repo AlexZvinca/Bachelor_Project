@@ -18,8 +18,8 @@ class PlateFilter:
             now = time.time()
 
             # Check deduplication
-            last_seen = self.last_verified_time.get(plate, 0)
-            if (now - last_seen) > self.dedup_window:
+            last_seen = self.last_verified_time.get(plate)
+            if last_seen is None or(now - last_seen) > self.dedup_window:
                 self.last_verified_time[plate] = now
                 self.buffer.clear()
                 return plate

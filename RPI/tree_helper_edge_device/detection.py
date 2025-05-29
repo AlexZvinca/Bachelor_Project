@@ -16,12 +16,15 @@ class Detector:
 
     def preprocess(self, frame):
         if self.input_dtype == np.uint8:
-            input_data = np.expand_dims(frame.astype(np.uint8), axis=0)
+            return np.expand_dims(frame.astype(np.uint8), axis=0)
         elif self.input_dtype == np.int8:
-            input_data = np.expand_dims(frame.astype(np.int8), axis=0)
+            scale, zero_point = self.input_details[0]['quantization']
+            frame_scaled = frame.astype(np.float32) / 255.0
+            input_data = (frame_scaled / scale + zero_point).astype(np.int8)
+            return np.expand_dims(input_data, axis=0)
         else:
             raise ValueError("Unsupported input type!")
-        return input_data
+
 
     def postprocess(self, output, conf_threshold=0.5, iou_threshold=0.5):
         output = output[0]
@@ -48,7 +51,8 @@ class Detector:
         return [[*boxes_xyxy[i], float(scores[i])] for i in indices]
 
     def detect(self, frame):
-        input_data = self.preprocess(frame)
+        resized = cv2.resize(frame, (self.input_size, self.input_size))
+        input_data = self.preprocess(resized)
         self.interpreter.set_tensor(self.input_details[0]['index'], input_data)
         self.interpreter.invoke()
         output = self.interpreter.get_tensor(self.output_details[0]['index'])
@@ -57,4 +61,4 @@ class Detector:
             scale, zero_point = self.output_details[0]['quantization']
             output = (output.astype(np.float32) - zero_point) * scale
 
-        return self.postprocess(output)
+        return self.postprocess(output), resized

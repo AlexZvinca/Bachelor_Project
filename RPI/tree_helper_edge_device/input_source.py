@@ -5,71 +5,39 @@ from PIL import Image
 from plate_processor import PlateProcessor
 
 
-def draw_detections(frame, detections):
+def draw_detections(frame, detections, scale_x=1.0, scale_y=1.0):
     for det in detections:
-        x1, y1, x2, y2 = map(int, det[:4])
+        if len(det) < 5:
+            continue  # skip malformed detection
+        x1, y1, x2, y2 = [int(det[0]*scale_x), int(det[1]*scale_y),
+                          int(det[2]*scale_x), int(det[3]*scale_y)]
         conf = det[4]
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
         cv2.putText(frame, f"{conf:.2f}", (x1, y1 - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
     return frame
 
+
 def run_on_image(image_path, detector, output_path="output_image_annotated.jpg"):
-    # Load and preprocess image using PIL to ensure RGB
     image = Image.open(image_path).convert("RGB")
-    input_size = detector.input_details[0]['shape'][1]
-    resized = image.resize((input_size, input_size))
-    image_np = np.array(resized)
-
-    input_dtype = detector.input_details[0]['dtype']
-    quant_params = detector.input_details[0]['quantization']
-
-    if input_dtype == np.uint8:
-        input_data = np.expand_dims(image_np.astype(np.uint8), axis=0)
-    elif input_dtype == np.int8:
-        scale, zero_point = quant_params
-        input_data = np.expand_dims(image_np.astype(np.float32) / 255.0, axis=0)
-        input_data = (input_data / scale + zero_point).astype(np.int8)
-    else:
-        raise ValueError("Unsupported input dtype!")
-
-    # Inference
-    detector.interpreter.set_tensor(detector.input_details[0]['index'], input_data)
-    detector.interpreter.invoke()
-
-    output = detector.interpreter.get_tensor(detector.output_details[0]['index'])
-    if detector.output_details[0]['dtype'] == np.int8:
-        scale, zero_point = detector.output_details[0]['quantization']
-        output = (output.astype(np.float32) - zero_point) * scale
-
-    detections = detector.postprocess(output)
-
-    # Draw on original-sized image (not the resized one)
-    image_draw = np.array(image)
-    scale_x = image_draw.shape[1] / input_size
-    scale_y = image_draw.shape[0] / input_size
-
-    for det in detections:
-        x1, y1, x2, y2, conf = det
-        x1 = int(x1 * scale_x)
-        y1 = int(y1 * scale_y)
-        x2 = int(x2 * scale_x)
-        y2 = int(y2 * scale_y)
-
-        cv2.rectangle(image_draw, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        cv2.putText(image_draw, f"{conf:.2f}", (x1, y1 - 10),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
-
-    # Save result
-    cv2.imwrite(output_path, cv2.cvtColor(image_draw, cv2.COLOR_RGB2BGR))
+    image_np = np.array(image)
+    detections, _ = detector.detect(image_np)
+    
+    scale_x = image.size[1] / detector.input_size
+    scale_y = image.size[0] / detector.input_size
+    
+    image_annotated = draw_detections(image_np.copy(), detections, scale_x, scale_y)
+    cv2.imwrite(output_path, cv2.cvtColor(image_annotated, cv2.COLOR_RGB2BGR))
     print(f"Saved annotated image to {output_path}")
+    
     if detections:
         processor = PlateProcessor(min_confirmations=1)
-        processor.process_frame(image_draw)  
-    processor.shutdown()
+        processor.process_frame(image_np)
+        processor.shutdown()
 
 def run_on_video(video_path, detector, output_path="output_annotated.mp4"):
     processor = PlateProcessor()
+    processor.ensure_sim_ready()
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
         print(f"Failed to open video: {video_path}")
@@ -88,53 +56,20 @@ def run_on_video(video_path, detector, output_path="output_annotated.mp4"):
     frame_count = 0
     start_time = time.time()
 
-    input_size = detector.input_details[0]['shape'][1]
-    input_dtype = detector.input_details[0]['dtype']
-    quant_params = detector.input_details[0]['quantization']
-
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret:
             break
 
-        resized = cv2.resize(frame, (input_size, input_size))
-
-        if input_dtype == np.uint8:
-            input_data = np.expand_dims(resized.astype(np.uint8), axis=0)
-        elif input_dtype == np.int8:
-            scale, zero_point = quant_params
-            input_data = np.expand_dims(resized.astype(np.float32) / 255.0, axis=0)
-            input_data = (input_data / scale + zero_point).astype(np.int8)
-        else:
-            raise ValueError("Unsupported input dtype!")
-
-        detector.interpreter.set_tensor(detector.input_details[0]['index'], input_data)
-        detector.interpreter.invoke()
-
-        output = detector.interpreter.get_tensor(detector.output_details[0]['index'])
-        if detector.output_details[0]['dtype'] == np.int8:
-            scale, zero_point = detector.output_details[0]['quantization']
-            output = (output.astype(np.float32) - zero_point) * scale
-
-        detections = detector.postprocess(output)
-
-        scale_x = width / input_size
-        scale_y = height / input_size
-        
+        detections, _ = detector.detect(frame)
         if detections and processor.should_process():
             processor.process_frame(frame)
-
-        for det in detections:
-            x1, y1, x2, y2, conf = det
-            x1 = int(x1 * scale_x)
-            y1 = int(y1 * scale_y)
-            x2 = int(x2 * scale_x)
-            y2 = int(y2 * scale_y)
-            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.putText(frame, f"{conf:.2f}", (x1, y1 - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
-
-        out.write(frame)
+        
+        scale_x = frame.shape[1] / detector.input_size
+        scale_y = frame.shape[0] / detector.input_size
+        
+        output = draw_detections(frame.copy(), detections, scale_x, scale_y)
+        out.write(output)
         frame_count += 1
 
     cap.release()
@@ -146,6 +81,7 @@ def run_on_video(video_path, detector, output_path="output_annotated.mp4"):
 
 def run_live_feed(detector, camera):
     processor = PlateProcessor()
+    processor.ensure_sim_ready()
     print("Starting live feed...")
     frame_count = 0
     start_time = time.time()
@@ -153,12 +89,14 @@ def run_live_feed(detector, camera):
     try:
         while True:
             frame = camera.get_frame()
-            detections = detector.detect(frame)
+            detections, _ = detector.detect(frame)
             
             if detections and processor.should_process():
                 processor.process_frame(frame)
-                
-            output = draw_detections(frame, detections)
+            
+            scale_x = frame.shape[1] / detector.input_size
+            scale_y = frame.shape[0] / detector.input_size
+            output = draw_detections(frame, detections, scale_x, scale_y)
 
             frame_count += 1
             fps = frame_count / (time.time() - start_time)
@@ -167,10 +105,10 @@ def run_live_feed(detector, camera):
 
             cv2.imshow("Detection - Live", output)
             if cv2.waitKey(1) & 0xFF == ord('q'):
-                processor.shutdown()
                 break 
 
     finally:
+        processor.shutdown()
         cv2.destroyAllWindows()
         camera.stop()
         print("Live feed stopped.")

@@ -3,8 +3,8 @@ from camera_stream import PiCameraStream
 from input_source import run_on_image, run_on_video, run_live_feed
 
 def main():
-    mode = "image"
-    detector = Detector("model")
+    mode = "live"
+    detector = Detector("")
 
     if mode == "image":
         run_on_image("", detector)

@@ -4,6 +4,8 @@ from ocr import send_to_plate_api
 from plate_filter import PlateFilter
 from comm import SIM7600
 
+PHONE_NUMBER = ""
+
 class PlateProcessor:
     def __init__(self, sim_module=None, cooldown=15, min_confirmations=3):
         self.plate_filter = PlateFilter(min_confirmations=min_confirmations)
@@ -55,7 +57,7 @@ class PlateProcessor:
             lat, lon = self.sim.gps_coords
             gps_text = f"Location: {lat:.6f}, {lon:.6f}" if lat and lon else ""
             self.sim.send_sms(
-                "phone number",
+                PHONE_NUMBER,
                 f"ALERT: Unauthorized truck detected! Plate: {verified} {gps_text}"
             )
         elif authorized is True:
