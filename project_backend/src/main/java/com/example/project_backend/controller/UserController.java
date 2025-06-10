@@ -1,6 +1,5 @@
 package com.example.project_backend.controller;
 
-import com.amazonaws.services.s3.model.S3Object;
 import com.example.project_backend.dto.UserCreationDTO;
 import com.example.project_backend.entities.User;
 import com.example.project_backend.service.BucketService;
@@ -11,14 +10,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriUtils;
 
-import java.io.File;
 import java.util.List;
 
 @RestController
@@ -114,15 +108,4 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-//    @RequestMapping(method = RequestMethod.OPTIONS, path = "/users")
-//    public ResponseEntity<Void> handleOptions() {
-//        return ResponseEntity.ok()
-//                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-//                .header("Access-Control-Allow-Headers", "Content-Type, Authorization")
-//                .header("Access-Control-Allow-Origin", "http://localhost:5173")
-//                .header("Access-Control-Allow-Credentials", "true")
-//                .build();
-//    }
-
 }

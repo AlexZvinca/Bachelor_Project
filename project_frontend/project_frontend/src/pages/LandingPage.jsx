@@ -1,4 +1,3 @@
-import React from "react";
 import "../styles/LandingPage.css";
 import {useNavigate} from "react-router-dom";
 
@@ -19,7 +18,7 @@ function LandingPage() {
         <div className="landing-page">
             <div className="logo-container">
                 <img
-                    src="../../public/TreeHelper.png"
+                    src="/TreeHelper.png"
                     alt="Logo"
                     className="logo"
                 />

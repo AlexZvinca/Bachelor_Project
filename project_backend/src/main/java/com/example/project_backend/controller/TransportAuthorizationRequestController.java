@@ -3,10 +3,8 @@ package com.example.project_backend.controller;
 import com.example.project_backend.dto.StatusCommentsDTO;
 import com.example.project_backend.dto.TransportAuthorizationRequestCountyDTO;
 import com.example.project_backend.dto.TransportAuthorizationRequestDTO;
-import com.example.project_backend.dto.UserCreationDTO;
 import com.example.project_backend.entities.County;
 import com.example.project_backend.entities.TransportAuthorizationRequest;
-import com.example.project_backend.entities.User;
 import com.example.project_backend.service.TransportAuthorizationRequestService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,20 +46,6 @@ public class TransportAuthorizationRequestController {
         return ResponseEntity.ok(requests);
     }
 
-//    @GetMapping("/county/{county}")
-//    public ResponseEntity<List<TransportAuthorizationRequest>> getRequestsByCounty(@PathVariable String county) {
-//        try {
-//            County countyEnum = County.valueOf(county);
-//            List<TransportAuthorizationRequest> requests = transportAuthorizationRequestService.getRequestsByCounty(countyEnum);
-//            if (requests.isEmpty()) {
-//                return new ResponseEntity<>(requests, HttpStatus.OK);
-//            }
-//            return ResponseEntity.ok(requests);
-//        } catch (IllegalArgumentException e) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//    }
-
     @GetMapping("/county/{county}")
     public ResponseEntity<List<TransportAuthorizationRequestCountyDTO>> getRequestsByCounty(@PathVariable String county) {
         try {
@@ -96,12 +80,6 @@ public class TransportAuthorizationRequestController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-//    @GetMapping("/check")
-//    public ResponseEntity<Boolean> checkIfPlateAuthorized(@RequestParam String plate) {
-//        boolean isAuthorized = transportAuthorizationRequestService.isPlateAuthorized(plate);
-//        return ResponseEntity.ok(isAuthorized);
-//    }
 
     @GetMapping("/check")
     public ResponseEntity<String> checkAuthorization(@RequestParam String plate) {

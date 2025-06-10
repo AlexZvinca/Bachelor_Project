@@ -12,7 +12,6 @@ function DocumentPage() {
 
     const params = new URLSearchParams(location.search);
     const userId = params.get('userId');
-    //const authId = params.get('authId');
 
     useEffect(() => {
         const fetchDocument = async () => {
@@ -43,7 +42,6 @@ function DocumentPage() {
 
     return (
         <div style={{ padding: '20px' }}>
-            {/*Weird response if I navigate tp -1*/}
             <button onClick={() => navigate("/dashboard")} style={{ marginBottom: '20px' }}>
                 Back to Dashboard
             </button>

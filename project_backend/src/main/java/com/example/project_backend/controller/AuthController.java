@@ -28,9 +28,6 @@ public class AuthController {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private JwtUtil jwtUtil;
 
     @CrossOrigin(origins = "http://localhost:5173")
@@ -43,7 +40,6 @@ public class AuthController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.email());
         User user = userRepository.findByEmail(authenticationRequest.email());
 
-        //return jwtUtil.generateToken(userDetails);
         return new AuthDTO(user.getId(), jwtUtil.generateToken(userDetails), user.getUserRole(), user.getCounty());
     }
 

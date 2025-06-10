@@ -79,9 +79,6 @@ function LoginPage() {
                     Don't have an account?{' '}
                     <Link to="/register" className="link">Register</Link>
                 </p>
-                <p>
-                    {/*<Link to="/forgot-password" className="link">Forgot Password?</Link>*/}
-                </p>
             </div>
         </div>
     );

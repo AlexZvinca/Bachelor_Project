@@ -109,11 +109,6 @@ function RegisterPage() {
             return;
         }
 
-        // if (!/^\d{13}$/.test(formData.cnp)) {
-        //     setError('CNP must contain exactly 13 digits');
-        //     return;
-        // }
-
         if (!idDocument) {
             setError('Please upload a copy of your ID');
             return;
@@ -145,14 +140,6 @@ function RegisterPage() {
     };
 
     const counties = Object.keys(countyMapping);
-
-    // const counties = [
-    //     "Alba", "Arad", "Argeș", "Bacău", "Bihor", "Bistrița-Năsăud", "Botoșani", "Brașov", "Brăila",
-    //     "Buzău", "Caraș-Severin", "Călărași", "Cluj", "Constanța", "Covasna", "Dâmbovița", "Dolj",
-    //     "Galați", "Giurgiu", "Gorj", "Harghita", "Hunedoara", "Ialomița", "Iași", "Ilfov", "Maramureș",
-    //     "Mehedinți", "Mureș", "Neamț", "Olt", "Prahova", "Sălaj", "Satu Mare", "Sibiu", "Suceava",
-    //     "Teleorman", "Timiș", "Tulcea", "Vaslui", "Vâlcea", "Vrancea", "București", "Foreign Country"
-    // ];
 
     return (
         <div className="register-container">

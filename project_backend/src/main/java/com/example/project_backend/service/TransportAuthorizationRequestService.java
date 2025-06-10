@@ -3,13 +3,11 @@ package com.example.project_backend.service;
 import com.example.project_backend.dto.StatusCommentsDTO;
 import com.example.project_backend.dto.TransportAuthorizationRequestCountyDTO;
 import com.example.project_backend.dto.TransportAuthorizationRequestDTO;
-import com.example.project_backend.dto.UserCreationDTO;
 import com.example.project_backend.entities.*;
 import com.example.project_backend.repository.TransportAuthorizationRequestRepository;
 import com.example.project_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.cglib.core.Local;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -109,7 +107,6 @@ public class TransportAuthorizationRequestService {
 
         System.out.println(status);
 
-        //status = status.substring(1, status.length() - 1);
         switch (status)
         {
             case "GRANTED":
@@ -133,7 +130,7 @@ public class TransportAuthorizationRequestService {
     }
 
 
-    @Scheduled(cron = "0 0 0 * * *")//Every night at midnight
+    @Scheduled(cron = "0 0 0 * * *") //Every night at 00:00
     @EventListener(ApplicationReadyEvent.class)
     public void expireOutdatedAuthorizations(){
         LocalDate today = LocalDate.now();
