@@ -169,3 +169,32 @@ textarea:focus {
 .delete-btn:hover {
     background-color: #c82333;
 }
+
+.role-select {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    padding: 10px 15px;
+    color: #fff;
+    background-color: #53b02b;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.role-select:hover {
+    background-color: #328f39;
+}
+
+.role-select:focus {
+    outline: none;
+    background-color: #328f39;
+    box-shadow: 0 0 5px rgba(83, 176, 43, 0.7);
+}
+
+.role-select:disabled {
+    background-color: #a8d5b7;
+    color: #f1f1f1;
+    cursor: not-allowed;
+}

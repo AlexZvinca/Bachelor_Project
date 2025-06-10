@@ -19,7 +19,7 @@ function LandingPage() {
         <div className="landing-page">
             <div className="logo-container">
                 <img
-                    src="../../public/TreesHelper.png"
+                    src="../../public/TreeHelper.png"
                     alt="Logo"
                     className="logo"
                 />

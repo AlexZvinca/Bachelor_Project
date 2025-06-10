@@ -157,6 +157,9 @@ public class UserService{
             case "REQUESTOR":
                 user.setUserRole(UserRole.REQUESTOR);
                 break;
+            case "ADMIN":
+                user.setUserRole(UserRole.ADMIN);
+                break;
             default:
                 throw new RuntimeException("Invalid role");
         }

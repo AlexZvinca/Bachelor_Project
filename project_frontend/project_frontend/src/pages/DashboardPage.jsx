@@ -307,12 +307,15 @@ function Dashboard() {
                                     <p><strong>Address:</strong> {user.address}, {user.city}, {user.county}</p>
                                     <p><strong>CNP:</strong> {user.cnp}</p>
                                     <p><strong>Role:</strong> {user.userRole}</p>
-                                    <button
-                                        className="dashboard-btn"
-                                        onClick={() => handleRoleChange(user.id, user.userRole === 'AUTHORITY' ? 'REQUESTOR' : 'AUTHORITY')}
+                                    <select
+                                        className="role-select"
+                                        value={users.find(u => u.id === user.id)?.userRole || ''}
+                                        onChange={(e) => handleRoleChange(user.id, e.target.value)}
                                     >
-                                        {user.userRole === 'AUTHORITY' ? 'Remove Authority' : 'Grant Authority'}
-                                    </button>
+                                        <option value="REQUESTOR">Requestor</option>
+                                        <option value="AUTHORITY">Authority</option>
+                                        <option value="ADMIN">Admin</option>
+                                    </select>
                                     <button
                                         className="delete-btn"
                                         onClick={() => handleDeleteUser(user.id)}

@@ -69,7 +69,8 @@ function NewAuthorizationForm() {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
-            [name]: value
+            [name]: value,
+            ...(name === 'fromDate' && { untilDate: '' }),
         }));
     };
 
@@ -89,7 +90,7 @@ function NewAuthorizationForm() {
             await axios.post('http://localhost:8080/authorizationRequest', {
                 userId,
                 county: formData.county,
-                licensePlateNumber: formData.licensePlateNumber,
+                licensePlateNumber: formData.licensePlateNumber.replace(/\s+/g, ''),
                 description: formData.description,
                 fromDate: formData.fromDate,
                 volume: formData.volume,
@@ -162,6 +163,7 @@ function NewAuthorizationForm() {
                         onChange={handleChange}
                         required
                         className="input"
+                        min={formData.fromDate || ''}
                     />
                 </div>
 

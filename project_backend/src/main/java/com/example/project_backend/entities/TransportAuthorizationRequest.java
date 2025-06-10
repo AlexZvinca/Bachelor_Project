@@ -79,4 +79,21 @@ public class TransportAuthorizationRequest {
         this.fromDate = fromDate;
         this.untilDate = untilDate;
     }
+
+    @Override
+    public String toString() {
+        return "TransportAuthorizationRequest{" +
+                "id=" + id +
+                ", user=" + user.getId() +
+                ", county=" + county +
+                ", licensePlateNumber='" + licensePlateNumber + '\'' +
+                ", description='" + description + '\'' +
+                ", volume=" + volume +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                ", statusComments='" + statusComments + '\'' +
+                ", fromDate=" + fromDate +
+                ", untilDate=" + untilDate +
+                '}';
+    }
 }

@@ -14,9 +14,9 @@ import java.util.List;
 @Data
 @Builder
 @Entity
-@Table(name="user_info")
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="user_info")
 public class User{
     @Id
     @GeneratedValue(generator = "county_based_id")

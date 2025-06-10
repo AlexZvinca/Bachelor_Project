@@ -93,9 +93,12 @@ public class UserController {
     public ResponseEntity<Void> changeUserRole(@PathVariable String id,
                                                @RequestBody String role)
     {
-        userService.changeUserRole(id, role);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        try {
+            userService.changeUserRole(id, role);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping(path = "{id}")

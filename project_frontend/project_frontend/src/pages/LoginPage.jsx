@@ -48,7 +48,7 @@ function LoginPage() {
 
     return (
         <div className="container">
-            <h2>Login</h2>
+            <h2>Log In</h2>
             <form onSubmit={handleSubmit} className="form">
                 <div className="inputGroup">
                     <label>Email:</label>
@@ -71,7 +71,7 @@ function LoginPage() {
                     />
                 </div>
                 {error && <p className="error">{error}</p>}
-                <button type="submit">Login</button>
+                <button type="submit">Log In</button>
             </form>
 
             <div className="links">
