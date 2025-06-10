@@ -87,7 +87,7 @@ function NewAuthorizationForm() {
         setConfirmationMessage('Authorization request has been submitted successfully.');
 
         try {
-            await axios.post('http://localhost:8080/authorizationRequest', {
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/authorizationRequest`, {
                 userId,
                 county: formData.county,
                 licensePlateNumber: formData.licensePlateNumber.replace(/\s+/g, ''),

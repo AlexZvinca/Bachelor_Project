@@ -18,7 +18,7 @@ function DocumentPage() {
             setLoading(true);
             setError(null);
             try {
-                const response = await axios.get(`http://localhost:8080/users/${userId}/id-document`, {
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/${userId}/id-document`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                         'Content-Type': 'image/jpeg',

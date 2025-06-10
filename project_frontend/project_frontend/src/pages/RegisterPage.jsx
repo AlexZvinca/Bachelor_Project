@@ -124,7 +124,7 @@ function RegisterPage() {
         formDataToSend.append('details', JSON.stringify(formData));
         formDataToSend.append('idDocument', idDocument);
 
-        axios.post('http://localhost:8080/users', formDataToSend, {
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/users`, formDataToSend, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

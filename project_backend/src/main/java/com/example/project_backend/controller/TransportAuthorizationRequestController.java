@@ -41,34 +41,30 @@ public class TransportAuthorizationRequestController {
     public ResponseEntity<List<TransportAuthorizationRequest>> getRequestsByUserId(@PathVariable String userId) {
         List<TransportAuthorizationRequest> requests = transportAuthorizationRequestService.getRequestsByUserId(userId);
         if (requests.isEmpty()) {
-            return new ResponseEntity<>(requests, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(requests);
     }
 
     @GetMapping("/county/{county}")
     public ResponseEntity<List<TransportAuthorizationRequestCountyDTO>> getRequestsByCounty(@PathVariable String county) {
-        try {
-            County countyEnum = County.valueOf(county.toUpperCase());
-            List<TransportAuthorizationRequestCountyDTO> requests = transportAuthorizationRequestService.getRequestsByCounty(countyEnum);
-
-            if (requests.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-
-            return ResponseEntity.ok(requests);
-
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        County countyEnum = County.valueOf(county.toUpperCase());
+        List<TransportAuthorizationRequestCountyDTO> requests = transportAuthorizationRequestService.getRequestsByCounty(countyEnum);
+        if (requests.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+        return ResponseEntity.ok(requests);
     }
 
     @PutMapping(path = "status/{id}")
     public ResponseEntity<Void> changeTransportAuthorizationRequestStatus(@PathVariable Integer id,
                                                @RequestBody String status)
     {
-        transportAuthorizationRequestService.changeTransportAuthorizationRequestStatus(id, status);
 
+        TransportAuthorizationRequest newTransportAuthorizationRequest = transportAuthorizationRequestService.changeTransportAuthorizationRequestStatus(id, status);
+        if(newTransportAuthorizationRequest == null){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -76,8 +72,11 @@ public class TransportAuthorizationRequestController {
     public ResponseEntity<Void> changeTransportAuthorizationRequestStatusAndComments(@PathVariable Integer id,
                                                                           @RequestBody StatusCommentsDTO status_comments)
     {
-        transportAuthorizationRequestService.changeTransportAuthorizationRequestStatusAndComments(id, status_comments);
 
+        TransportAuthorizationRequest newTransportAuthorizationRequest = transportAuthorizationRequestService.changeTransportAuthorizationRequestStatusAndComments(id, status_comments);
+        if(newTransportAuthorizationRequest == null){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

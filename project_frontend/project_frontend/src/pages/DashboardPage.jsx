@@ -34,8 +34,8 @@ function Dashboard() {
         try {
             const url =
                 userRole === 'AUTHORITY'
-                    ? `http://localhost:8080/authorizationRequest/county/${userCounty}`
-                    : `http://localhost:8080/authorizationRequest/user/${userId}`;
+                    ? `${import.meta.env.VITE_BACKEND_URL}/authorizationRequest/county/${userCounty}`
+                    : `${import.meta.env.VITE_BACKEND_URL}/authorizationRequest/user/${userId}`;
 
             const response = await axios.get(url, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -54,7 +54,7 @@ function Dashboard() {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get(`http://localhost:8080/users/${userId}`, {
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             });
             setUserData(response.data);
@@ -71,7 +71,7 @@ function Dashboard() {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get(`http://localhost:8080/users`, {
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/users`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             });
             setUsers(response.data.filter(user => user.id !== userId) || []);
@@ -86,7 +86,7 @@ function Dashboard() {
     const handleRoleChange = async (id, role) => {
 
         axios({
-            url: `http://localhost:8080/users/${id}/role`,
+            url: `${import.meta.env.VITE_BACKEND_URL}/users/${id}/role`,
             method: "PUT",
             data: JSON.stringify(role),
             headers: {
@@ -137,7 +137,7 @@ function Dashboard() {
 
         try {
             await axios.put(
-                `http://localhost:8080/authorizationRequest/status-motivation/${id}`,
+                `${import.meta.env.VITE_BACKEND_URL}/authorizationRequest/status-motivation/${id}`,
                 { status, comments },
                 {
                     headers: {
@@ -152,8 +152,7 @@ function Dashboard() {
             setStatusUpdates(prev => ({
                 ...prev,
                 [id]: {
-                    ...prev[id],
-                    comments: ''
+                    [id]: {},
                 }
             }));
 
@@ -167,7 +166,7 @@ function Dashboard() {
     const handleDeleteUser = async (id) => {
         if (window.confirm("Are you sure you want to delete this user?")) {
             try {
-                await axios.delete(`http://localhost:8080/users/${id}`, {
+                await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/users/${id}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },

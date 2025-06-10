@@ -42,7 +42,11 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id) {
         User user = userService.getUserById(id);
-        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/{id}/id-document")
@@ -98,14 +102,12 @@ public class UserController {
     @DeleteMapping(path = "{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable String id)
     {
-        try
-        {
+        try {
             userService.deleteUser(id);
         }catch (Exception e)
         {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

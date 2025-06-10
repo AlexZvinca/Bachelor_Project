@@ -23,7 +23,7 @@ function LoginPage() {
 
         setError(null);
 
-        axios.post('http://localhost:8080/token', {email, password})
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/token`, {email, password})
             .then(function (response) {
                 console.log(response);
                 const { userId, token, role, county } = response.data;

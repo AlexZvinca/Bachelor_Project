@@ -77,7 +77,7 @@ public class TransportAuthorizationRequestService {
                 ).toList();
     }
 
-    public void changeTransportAuthorizationRequestStatus(Integer id, String status)
+    public TransportAuthorizationRequest changeTransportAuthorizationRequestStatus(Integer id, String status)
     {
         TransportAuthorizationRequest transportAuthorizationRequest = transportAuthorizationRequestRepository.findById(id).orElseThrow();
         System.out.println(status);
@@ -95,10 +95,10 @@ public class TransportAuthorizationRequestService {
                 throw new RuntimeException("Invalid status");
         }
 
-        transportAuthorizationRequestRepository.save(transportAuthorizationRequest);
+        return transportAuthorizationRequestRepository.save(transportAuthorizationRequest);
     }
 
-    public void changeTransportAuthorizationRequestStatusAndComments(Integer id, StatusCommentsDTO status_comments)
+    public TransportAuthorizationRequest changeTransportAuthorizationRequestStatusAndComments(Integer id, StatusCommentsDTO status_comments)
     {
         TransportAuthorizationRequest transportAuthorizationRequest = transportAuthorizationRequestRepository.findById(id).orElseThrow();
 
@@ -121,7 +121,7 @@ public class TransportAuthorizationRequestService {
 
         transportAuthorizationRequest.setStatusComments(status_comments.comments());
 
-        transportAuthorizationRequestRepository.save(transportAuthorizationRequest);
+        return transportAuthorizationRequestRepository.save(transportAuthorizationRequest);
     }
 
     public boolean isPlateAuthorized(String licensePlateNumber) {
