@@ -25,8 +25,8 @@ function LandingPage() {
             </div>
             <h1 className="landing-title">Get your authorization for wood transport in a few easy steps!</h1>
             <div className="buttons-container">
-                <button className="button" onClick={handleRegisterClick}> Register</button>
-                <button className="button" onClick={handleLoginClick}>Log In</button>
+                <button id="registerBtn" className="button" onClick={handleRegisterClick}> Register</button>
+                <button id="loginBtn" className="button" onClick={handleLoginClick}>Log In</button>
             </div>
         </div>
     );
