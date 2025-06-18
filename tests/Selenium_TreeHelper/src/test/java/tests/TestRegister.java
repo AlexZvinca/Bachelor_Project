@@ -42,7 +42,7 @@ public class TestRegister {
         driver.findElement(By.name("lastName")).sendKeys("User");
         driver.findElement(By.name("dateOfBirth")).sendKeys("1990-01-01");
 
-        // Select county from dropdown by value (e.g. "AB" for Alba)
+        // Select county from dropdown by value
         WebElement countyDropdown = driver.findElement(By.name("county"));
         countyDropdown.click();
         countyDropdown.findElement(By.cssSelector("option[value='AB']")).click();
