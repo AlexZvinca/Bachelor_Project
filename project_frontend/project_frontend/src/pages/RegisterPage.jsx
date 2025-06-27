@@ -222,6 +222,7 @@ function RegisterPage() {
                         onChange={handleChange}
                         required
                         className="input"
+                        max={new Date().toISOString().split('T')[0]}
                     />
                 </div>
 

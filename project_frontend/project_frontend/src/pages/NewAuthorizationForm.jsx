@@ -151,6 +151,7 @@ function NewAuthorizationForm() {
                         onChange={handleChange}
                         required
                         className="input"
+                        min={new Date().toISOString().split('T')[0]}
                     />
                 </div>
 

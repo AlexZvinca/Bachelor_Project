@@ -4,7 +4,7 @@ from ocr import send_to_plate_api
 from plate_filter import PlateFilter
 from comm import SIM7600
 
-PHONE_NUMBER = ""
+PHONE_NUMBER =
 
 class PlateProcessor:
     def __init__(self, sim_module=None, cooldown=15, min_confirmations=3):

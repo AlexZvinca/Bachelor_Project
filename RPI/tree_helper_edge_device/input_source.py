@@ -8,7 +8,7 @@ from plate_processor import PlateProcessor
 def draw_detections(frame, detections, scale_x=1.0, scale_y=1.0):
     for det in detections:
         if len(det) < 5:
-            continue  # skip malformed detection
+            continue
         x1, y1, x2, y2 = [int(det[0]*scale_x), int(det[1]*scale_y),
                           int(det[2]*scale_x), int(det[3]*scale_y)]
         conf = det[4]

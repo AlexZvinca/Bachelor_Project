@@ -1,6 +1,6 @@
 import requests
 
-API_TOKEN = ""
+API_TOKEN =
 API_URL = "https://api.platerecognizer.com/v1/plate-reader/"
 
 def send_to_plate_api(image_path, camera_id="cam_rpi_01", region=None):

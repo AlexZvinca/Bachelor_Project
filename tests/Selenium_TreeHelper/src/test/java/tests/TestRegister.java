@@ -53,7 +53,7 @@ public class TestRegister {
 
         // Upload file for ID document
         WebElement fileInput = driver.findElement(By.name("idDocument"));
-        fileInput.sendKeys("image");
+        fileInput.sendKeys("file");
 
         // Submit form
         driver.findElement(By.cssSelector("button[type='submit']")).click();
@@ -100,7 +100,7 @@ public class TestRegister {
         driver.findElement(By.name("cnp")).sendKeys("1234567890123");
 
         // Upload file
-        driver.findElement(By.name("idDocument")).sendKeys("image");
+        driver.findElement(By.name("idDocument")).sendKeys("file");
 
         // Submit form
         driver.findElement(By.cssSelector("button[type='submit']")).click();
@@ -134,7 +134,7 @@ public class TestRegister {
         driver.findElement(By.name("cnp")).sendKeys("1234567890123");
 
         WebElement fileInput = driver.findElement(By.name("idDocument"));
-        fileInput.sendKeys("image");
+        fileInput.sendKeys("file");
 
         driver.findElement(By.cssSelector("button[type='submit']")).click();
 

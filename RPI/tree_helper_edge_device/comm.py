@@ -2,6 +2,8 @@ import RPi.GPIO as GPIO
 import serial
 import time
 
+WEB_URL =
+
 class SIM7600:
     def __init__(self, port="/dev/ttyS0", baudrate=115200, power_key=6, pin_code='0000'):
         self.ser = serial.Serial(port, baudrate, timeout=1)
@@ -99,7 +101,7 @@ class SIM7600:
     def check_plate_authorization(self, plate_number):
         print(f"\nChecking plate: {plate_number}")
         encoded_plate = plate_number.replace(" ", "%20")
-        url = f"https://url/authorizationRequest/check?plate={encoded_plate}"
+        url = f"{WEB_URL}/authorizationRequest/check?plate={encoded_plate}"
 
         self.send_at("AT+HTTPINIT", "OK", 2)
         self.send_at('AT+HTTPPARA="CID",1', "OK", 2)
